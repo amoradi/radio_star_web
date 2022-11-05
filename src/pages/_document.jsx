@@ -7,7 +7,7 @@ export default class Document extends NextDocument {
         <Head>
           <meta
             name="description"
-            content="DappCamp Warriors is a tutorial project from DappCamp"
+            content="RadioStar"
           ></meta>
 
           <link

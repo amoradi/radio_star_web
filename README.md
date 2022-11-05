@@ -1,6 +1,4 @@
-# DappCamp Warriors
-
-## Frontend
+# RadioStar
 
 This is the the frontend for our Dapp. It is built with Next.js and ethers.js.
 
@@ -15,24 +13,18 @@ This is the the frontend for our Dapp. It is built with Next.js and ethers.js.
 
 ---
 
-### Local Development Instructions
+## Local Dev
 
-1. Open a terminal tab and run the following command to run a local node. Keep this terminal tab open.
+```bash
+$ npm install
+$ npm run dev
+```
 
-```
-anvil
-```
+---
 
-2. From the anvil logs, import one of the private keys into your MetaMask.
-3. Deploy the contracts in [dappcamp-warriors](https://github.com/DappCamp-Cohort-4/dappcamp-warriors) to the local node.
-4. Create a .env file and add the addresses of your deployed contracts to it. You can refer to [.env.example](frontend/.env.example) for the syntax.
-5. (Optional) If you have made any changes to the final smart contracts in [dappcamp-warriors](https://github.com/DappCamp-Cohort-4/dappcamp-warriors), you need to update the abis in the [abi folder](frontend/src/data/abis).
-6. Install project dependencies and run the project.
+## Note
 
-```
-npm run install
-npm run dev
-```
+Be sure to update the [abi folder](frontend/src/data/abis) for smart contract changes.
 
 ---
 
