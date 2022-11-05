@@ -68,7 +68,7 @@ Mint.getLayout = function getLayout(page) {
   return (
     <Layout>
       <Head>
-        <title>Mint | DappCamp Warriors</title>
+        <title>Mint | Radio Star</title>
       </Head>
       {page}
     </Layout>

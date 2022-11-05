@@ -31,7 +31,7 @@ export default function Header() {
       <div className="container mx-auto flex flex-col flex-wrap items-center gap-4 p-5 md:flex-row lg:gap-0">
         <a className="title-font flex items-center font-medium text-gray-900 md:mb-0">
           <img src="https://www.dappcamp.xyz/favicon.png" className="h-12" />
-          <span className="ml-3 text-xl">DappCamp Warriors</span>
+          <span className="ml-3 text-xl">Radio Star</span>
         </a>
         <nav className="flex flex-wrap items-center justify-center text-base md:mr-auto	md:ml-4 md:border-l md:border-gray-400 md:py-1 md:pl-4">
           <Link href="/">

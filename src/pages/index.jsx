@@ -99,7 +99,7 @@ Home.getLayout = function getLayout(page) {
   return (
     <Layout>
       <Head>
-        <title>Home | DappCamp Warriors</title>
+        <title>Home | Radio Star</title>
       </Head>
       {page}
     </Layout>
