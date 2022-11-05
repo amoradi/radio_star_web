@@ -7,6 +7,8 @@ $ npm install
 $ npm run dev
 ```
 
+Runs on port 3000, http://localhost:3000
+
 ---
 
 
