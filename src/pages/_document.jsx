@@ -12,7 +12,7 @@ export default class Document extends NextDocument {
 
           <link
             rel="shortcut icon"
-            href="https://www.dappcamp.xyz/favicon.png"
+            href="/favicon.png"
           />
         </Head>
         <body>

@@ -66,7 +66,7 @@ function MyApp({ Component, pageProps }) {
   return (
     <>
       <Head>
-        <title>RadioStar</title>
+        <title>Radio Star</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
       <AccountContext.Provider value={account}>
