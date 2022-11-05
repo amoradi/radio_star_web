@@ -1,4 +1,4 @@
-# RadioStar
+# Radio Star
 
 This is the the frontend for our Dapp. It is built with Next.js and ethers.js.
 
