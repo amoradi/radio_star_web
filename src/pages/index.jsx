@@ -59,7 +59,7 @@ export default function Home() {
   };
 
   useEffect(() => {
-    loadNfts();
+    // loadNfts();
   }, [account]);
 
   return (
@@ -97,11 +97,13 @@ export default function Home() {
 
 Home.getLayout = function getLayout(page) {
   return (
+    <>
     <Layout>
       <Head>
         <title>Home | Radio Star</title>
       </Head>
       {page}
     </Layout>
+    </>
   );
 };

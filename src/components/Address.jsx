@@ -8,5 +8,5 @@ export default function Address({ address }) {
       "..." +
       address.slice(address.length - 4, address.length);
 
-  return <p className="rounded bg-gray-100 py-1 px-3">{shortAddress}</p>;
+  return <p className="text-sm font-semibold inline-flex items-center rounded border-solid border-2 text-gray-900 border-gray-900 py-1 px-3">{shortAddress}</p>;
 }

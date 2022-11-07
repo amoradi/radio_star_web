@@ -4,6 +4,9 @@ import { useAccount, useContracts } from "../contexts";
 import { useInterval } from "../utils/hooks";
 
 export default function Balance() {
+  // TODO: Maybe include something like this for Radio Star
+  return null;
+
   const account = useAccount();
   const { campContract } = useContracts();
 
