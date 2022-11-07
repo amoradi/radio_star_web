@@ -9,17 +9,17 @@
   }
   
   .react-tabs__tab-list {
-    border-bottom: 2px solid rgb(17,24,39);
+    border-bottom: 2px solid rgb(17,24,39) !important;
     margin: 0 0 10px;
     padding: 0;
   }
   
   .react-tabs__tab {
-    color: #999;
+    color: #999 !important;;
     display: inline-block;
-    border: 2px solid transparent;
-    border-bottom: none;
-    bottom: -2px;
+    border: 2px solid transparent !important;
+    border-bottom: none !important;
+    bottom: -2px !important;
     position: relative;
     list-style: none;
     padding: 6px 12px;
@@ -28,8 +28,8 @@
   
   .react-tabs__tab--selected {
     background: #fff;
-    border-color: rgb(17,24,39);
-    color: rgb(17,24,39);
+    border-color: rgb(17,24,39) !important;
+    color: rgb(17,24,39) !important;
     border-radius: 5px 5px 0 0;
   }
   
