@@ -3,6 +3,15 @@
 @tailwind utilities;
 
 
+h1, 
+h2, 
+h3, 
+h4, 
+h5, 
+h6 {
+    color: rgb(17,24,39);
+}
+
 /* React Tabs */
 .react-tabs {
     -webkit-tap-highlight-color: transparent;
