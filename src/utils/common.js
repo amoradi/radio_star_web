@@ -46,7 +46,7 @@ export const connectWallet = async () => {
   const { ethereum } = window;
   if (!ethereum) return null;
 
-  await ethereum.request({ method: "eth_requestAccounts" });
+  const t = await ethereum.request({ method: "eth_requestAccounts" });
   location.reload();
 };
 

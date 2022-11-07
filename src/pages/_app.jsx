@@ -39,23 +39,24 @@ function MyApp({ Component, pageProps }) {
 
     setupEthereumEventListeners(ethereum);
 
-    const campContract = getSignedContract(
-      campContractAddr,
-      campContractMetadata.output.abi
-    );
-    const dcWarriorsContract = getSignedContract(
-      dappCampWarriorsContractAddr,
-      warriorsContractMetadata.output.abi
-    );
-    const stakingContract = getSignedContract(
-      stakingContractAddr,
-      stakingContractMetdata.output.abi
-    );
+    // TODO: Use Radio Star
+    // const campContract = getSignedContract(
+    //   campContractAddr,
+    //   campContractMetadata.output.abi
+    // );
+    // const dcWarriorsContract = getSignedContract(
+    //   dappCampWarriorsContractAddr,
+    //   warriorsContractMetadata.output.abi
+    // );
+    // const stakingContract = getSignedContract(
+    //   stakingContractAddr,
+    //   stakingContractMetdata.output.abi
+    // );
 
-    if (!campContract || !dcWarriorsContract || !stakingContract) return;
+    // if (!campContract || !dcWarriorsContract || !stakingContract) return;
 
     const currentAccount = await getCurrentAccount();
-    setContracts({ campContract, dcWarriorsContract, stakingContract });
+    // setContracts({ campContract, dcWarriorsContract, stakingContract });
     setAccount(currentAccount);
   };
 
@@ -63,7 +64,7 @@ function MyApp({ Component, pageProps }) {
     load();
   }, []);
 
-  return (
+ return (
     <>
       <Head>
         <title>Radio Star</title>

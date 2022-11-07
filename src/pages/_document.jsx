@@ -7,15 +7,15 @@ export default class Document extends NextDocument {
         <Head>
           <meta
             name="description"
-            content="RadioStar"
+            content="Radio Star"
           ></meta>
 
           <link
             rel="shortcut icon"
-            href="/favicon.png"
+            href="/star_favicon.png"
           />
         </Head>
-        <body>
+        <body className="tracking-wide">
           <Main />
           <NextScript />
         </body>
