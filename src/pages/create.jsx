@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import 'react-tabs/style/react-tabs.css';
+import axios from 'axios';
 
 import { useRouter } from 'next/router'
 import Head from "next/head";
@@ -8,29 +8,103 @@ import Head from "next/head";
 import Layout from "components/Layout";
 import Spinner from "components/Spinner";
 
-import { useContracts } from "contexts";
+import { useAccount, useContracts } from "contexts";
 import { toastSuccessMessage, toastErrorMessage } from "utils/toast";
 
-export default function Create({ }) {
-    const router = useRouter();
-    const [tabIndex, setTabIndex] = useState(0);
-    
-    useEffect(() => {
-        if ("list" in router.query) {
-            setTabIndex(1);
-        } else {
-            setTabIndex(0);
-        }
-    },[router.query]);
+const convertBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+        const fileReader = new FileReader();
+        fileReader.readAsDataURL(file);
 
-    const onSubmit = (e) => {
+        fileReader.onload = () => {
+            resolve(fileReader.result);
+        };
+
+        fileReader.onerror = (error) => {
+            reject(error);
+        };
+    });
+};
+
+// const uploadImage = async (event) => {
+//     const file = event.target.files[0];
+//     const base64 = await convertBase64(file);
+//     avatar.src = base64;
+//     textArea.innerText = base64;
+// };
+
+export default function Create({ }) {
+  const account = useAccount();
+  const [submitMsg, setSubmitMsg] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(null);
+
+    // artist refs
+    const artistAddress = useRef(null);
+    const artistName = useRef(null);
+    // song refs
+    const name = useRef(null);
+    const description = useRef(null);
+    const image = useRef(null);
+    const animation = useRef(null);
+    // preview
+    const imagePrev = useRef(null);
+    const titlePrev = useRef(null);
+    const filePrev = useRef(null);
+    
+    const onSubmit = async (e) => {
+      setIsSubmitting(true);
+
         // Stop default form submission
         e.preventDefault();
 
+        // TODO:
         // call smart contract
 
         // Get token id from smart contract success event
         const tokenId = '';
+
+        // Log
+        console.dir({
+            artistAddress: artistAddress.current.value,
+            artistName: artistName.current.value,
+            name: name.current.value,
+            description: description.current.value,
+            image: image.current.files[0],
+            animation: animation.current.files[0]
+        });
+
+        // Encode cover art and song files
+        const file = image.current.files[0];
+        const base64 = await convertBase64(file);
+        const songFile = animation.current.files[0];
+        const songBase64 = await convertBase64(songFile);
+
+        // Set preview
+        imagePrev.current.style.backgroundImage = `url(${base64})`;
+        titlePrev.current.innerHTML = name.current.value;
+        filePrev.current.innerHTML = animation.current.files[0].name;
+
+        // POST to REST endpoint
+        const response = await axios.post("/api/nfts/", 
+          {
+            tokenId: 'foo_bar',
+            artistAddress: artistAddress.current.value,
+            artistName: artistName.current.value,
+            name: name.current.value,
+            description: description.current.value,
+            image: base64,
+            animation: songBase64
+        });
+
+        console.log(response);
+
+        if (response.status === 200) {
+          setSubmitMsg(200);
+        } else {
+          setSubmitMsg(response.statusText);
+        }
+
+        setIsSubmitting(false);
     }
 
     return (
@@ -39,29 +113,29 @@ export default function Create({ }) {
 
             <div className="py-12 flex justify-evenly items-start">
                 <form onSubmit={onSubmit}>
-                    <input type="text" name="artistAddress" hidden readOnly value={'chargha'} />
+                    <input ref={artistAddress}  type="text" name="artistAddress" hidden readOnly value={account.toLowerCase()} />
                     <label className="block font-semibold text-sm text-gray-900">
                         Artist Name
-                        <input required type="text" name="artistName" placeholder="ex. Buddy Holly" className="w-96 mt-2 block rounded border-solid border-2 border-gray-900 p-4 focus:outline-none" />
+                        <input ref={artistName} required type="text" name="artistName" placeholder="ex. Buddy Holly" className="w-96 mt-2 block rounded border-solid border-2 border-gray-900 p-4 focus:outline-none" />
                     </label>
                     <fieldset className="my-6">
                         <legend className="font-bold">Song</legend>
                         <div className="pt-4">
                         <label className="block font-semibold text-sm text-gray-900">
                             Title
-                            <input required type="text" name="name" placeholder="ex. That'll Be the Day" className="w-96 mt-2 block rounded border-solid border-2 border-gray-900 p-4 focus:outline-none" />
+                            <input ref={name} required type="text" name="name" placeholder="ex. That'll Be the Day" className="w-96 mt-2 block rounded border-solid border-2 border-gray-900 p-4 focus:outline-none" />
                         </label>
                         <label className="block font-semibold text-sm text-gray-900 mt-4">
                             Description
-                            <textarea required maxlength="200" rows="5" type="text" name="description" placeholder="ex. Recorded in Clovis, New Mexico, in February 1957..." className="w-96 mt-2 block rounded border-solid border-2 border-gray-900 p-4 focus:outline-none" />
+                            <textarea ref={description} required maxlength="200" rows="5" type="text" name="description" placeholder="ex. Recorded in Clovis, New Mexico, in February 1957..." className="w-96 mt-2 block rounded border-solid border-2 border-gray-900 p-4 focus:outline-none" />
                         </label>
                         <label className="block font-semibold text-sm text-gray-900 mt-4">
                             Cover Art (png, jpg)
-                            <input required type="file" name="image" accept="image/png, image/jpeg" className="cursor-pointer w-96 mt-2 block rounded border-solid border-2 border-gray-900 p-4 focus:outline-none" />
+                            <input ref={image} required type="file" name="image" accept="image/png, image/jpeg" className="cursor-pointer w-96 mt-2 block rounded border-solid border-2 border-gray-900 p-4 focus:outline-none" />
                         </label>
                         <label className="block font-semibold text-sm text-gray-900 mt-4">
-                            Song File (mp3)
-                            <input required type="file" name="animation" className="cursor-pointer w-96 mt-2 block rounded border-solid border-2 border-gray-900 p-4 focus:outline-none" />
+                            File (mp3)
+                            <input ref={animation} required type="file" name="animation" className="cursor-pointer w-96 mt-2 block rounded border-solid border-2 border-gray-900 p-4 focus:outline-none" />
                         </label>
                         </div>
                     </fieldset>
@@ -72,13 +146,15 @@ export default function Create({ }) {
                 <div>
                     <span className="block font-semibold text-sm text-gray-900">Preview</span>
                     <div className="border-2 mt-2 border-gray-900 rounded">
-                    <div className="w-96 h-72 bg-gray-100"></div>
-                    <div className="border-top-2 border-gray-900 p-4">
-                        <div>Title</div>
-                        <div>filename.png</div>
+                      <div className="w-96 h-72 bg-gray-100 bg-contain" ref={imagePrev}></div>
+                      <div className="border-t-2 border-gray-900 p-4">
+                          <div ref={titlePrev}>{`<title>`}</div>
+                          <div ref={filePrev}>{`<filename>`}</div>
+                      </div>
                     </div>
-                    </div>
-
+                    {isSubmitting && <div className="bg-gray-100 text-gray-400 border-dashed border-gray-300 border-4 my-8 text-center font-bold py-8 p-4">...Creating...</div>}
+                    {submitMsg === 200 && <div className="bg-emerald-100 text-emerald-400 border-dashed border-emerald-300 border-4 my-8 text-center font-bold py-8 p-4">NFT Created</div>}
+                    {submitMsg !== null && submitMsg !== 200 && <div className="bg-red-100 text-red-400 border-dashed border-red-300 border-4 my-8 text-center font-bold py-8 p-4">Error {submitMsg}</div>}
                 </div>
                 </div>  
         

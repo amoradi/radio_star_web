@@ -13,7 +13,6 @@ export default function handler(req, res) {
       // (skip for demo's sake)
       //
 
-
       //
       // Insert nft into data store, keyed by artist address.
       // 
@@ -37,13 +36,15 @@ export default function handler(req, res) {
       }
 
       mockDataStore[body.artistAddress].push(insertData);
+
+      console.dir(mockDataStore);
       
       //
       // Return response payload with "url" asset members.
       //
       // TODO: Well-form url endpoints. Make GET endpoints for /nfts/image/ and /nfts/animation
       // Should these be relative?
-      const responseData = { ...insertData, image_url: `http://nfts/image/${body.artistAddress}/${body.tokenId}`, animation_url: `http://nfts/animation/${body.artistAddress}/${body.tokenId}`, };
+      const responseData = { ...insertData, image_url: `/api/nfts/image/${body.artistAddress}/${body.tokenId}`, animation_url: `/api/nfts/animation/${body.artistAddress}/${body.tokenId}`, };
       delete responseData.image;
       delete responseData.animation;
 
@@ -53,3 +54,11 @@ export default function handler(req, res) {
       res.status(400).json({});
     }
   }
+
+  export const config = {
+    api: {
+        bodyParser: {
+            sizeLimit: '4mb' // Set desired value here
+        }
+    }
+}
