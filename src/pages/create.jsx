@@ -23,14 +23,118 @@ export default function Create({ }) {
         }
     },[router.query]);
 
+    const onSubmit = (e) => {
+        // Stop default form submission
+        e.preventDefault();
+
+        // call smart contract
+
+        // Get token id from smart contract success event
+        const tokenId = '';
+    }
+
     return (
         <div className="container mx-auto p-5">
            <h1 className="text-center text-lg font-bold">Create</h1>
 
-            <div className="py-12">
-            NFT creation form here
-            </div>  
-        </div>
+            <div className="py-12 flex justify-evenly items-start">
+                <form onSubmit={onSubmit}>
+                    <input type="text" name="artistAddress" hidden readOnly value={'chargha'} />
+                    <label className="block font-semibold text-sm text-gray-900">
+                        Artist Name
+                        <input required type="text" name="artistName" placeholder="ex. Buddy Holly" className="w-96 mt-2 block rounded border-solid border-2 border-gray-900 p-4 focus:outline-none" />
+                    </label>
+                    <fieldset className="my-6">
+                        <legend className="font-bold">Song</legend>
+                        <div className="pt-4">
+                        <label className="block font-semibold text-sm text-gray-900">
+                            Title
+                            <input required type="text" name="name" placeholder="ex. That'll Be the Day" className="w-96 mt-2 block rounded border-solid border-2 border-gray-900 p-4 focus:outline-none" />
+                        </label>
+                        <label className="block font-semibold text-sm text-gray-900 mt-4">
+                            Description
+                            <textarea required maxlength="200" rows="5" type="text" name="description" placeholder="ex. Recorded in Clovis, New Mexico, in February 1957..." className="w-96 mt-2 block rounded border-solid border-2 border-gray-900 p-4 focus:outline-none" />
+                        </label>
+                        <label className="block font-semibold text-sm text-gray-900 mt-4">
+                            Cover Art (png, jpg)
+                            <input required type="file" name="image" accept="image/png, image/jpeg" className="cursor-pointer w-96 mt-2 block rounded border-solid border-2 border-gray-900 p-4 focus:outline-none" />
+                        </label>
+                        <label className="block font-semibold text-sm text-gray-900 mt-4">
+                            Song File (mp3)
+                            <input required type="file" name="animation" className="cursor-pointer w-96 mt-2 block rounded border-solid border-2 border-gray-900 p-4 focus:outline-none" />
+                        </label>
+                        </div>
+                    </fieldset>
+
+                    <input type="submit" value="Create NFT" className="w-96 cursor-pointer mt-2 block text-white rounded border-solid border-2 bg-gray-900 border-gray-900 p-4 focus:outline-none" />
+                </form>
+
+                <div>
+                    <span className="block font-semibold text-sm text-gray-900">Preview</span>
+                    <div className="border-2 mt-2 border-gray-900 rounded">
+                    <div className="w-96 h-72 bg-gray-100"></div>
+                    <div className="border-top-2 border-gray-900 p-4">
+                        <div>Title</div>
+                        <div>filename.png</div>
+                    </div>
+                    </div>
+
+                </div>
+                </div>  
+        
+            <br />
+            <br />
+                <pre>
+                    
+                    
+                    {  `
+                        //
+                        // create/
+                        //
+                        // fill-out form
+                        // pre-fill artist with user.address
+                        // FE validation only
+                        //
+                        // on submit
+                        // - call smart contract?
+                        // - on event success
+                        //   - proceed to post to data store
+                        //   - if post failed. revert on Smart Contract?
+                        //   - on success, toast a success message. clear form.
+                        //
+                        // 
+                        // profile/
+                        //
+                        // created...
+                        // - list your created NFTs here
+                        // 
+                        // collected...
+                        // - query user.address for tokenId
+                        // - query REST API for ... GET nftsById's
+                        //
+                        //
+                        // home/
+                        // - query REST, GET nfts (ALL)
+                        // - list them
+                        //
+
+                        description: <song title> by <artist>,
+                        image: https://<link to song cover art image>,
+                        name: <name of song>,
+                        animation_url: https://<link to mp3 of song>,
+                        attributes: [
+                                {
+                                trait_type: Artist Name,
+                                value: <artist name>,
+                                },
+                            }
+                        `
+                    }
+                    
+                     
+                        
+                </pre>
+                </div>
     );
 
 //   const { dcWarriorsContract } = useContracts();
@@ -93,7 +197,7 @@ Create.getLayout = function getLayout(page) {
   return (
     <Layout>
       <Head>
-        <title>Account | Radio Star</title>
+        <title>Create | Radio Star</title>
       </Head>
       <div className="body-font mx-auto max-w-7xl p-4 text-gray-600">
         {page}

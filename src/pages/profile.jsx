@@ -110,7 +110,7 @@ Profile.getLayout = function getLayout(page) {
   return (
     <Layout>
       <Head>
-        <title>Account | Radio Star</title>
+        <title>Profile | Radio Star</title>
       </Head>
       <div className="body-font mx-auto max-w-7xl p-4 text-gray-600">
         {page}

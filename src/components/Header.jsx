@@ -33,7 +33,7 @@ export default function Header() {
       <div className="container mx-auto flex flex-col flex-wrap justify-between items-center gap-4 p-5 md:flex-row lg:gap-0">
         <Link href="/"><a className="title-font flex items-center font-medium text-gray-900 md:mb-0">
           {/* RADIO STAR<Image src="/radio_star_logo.png" alt="me" width="137.5" height="50" /> */}
-          <strong className="p-2">RADIO STAR</strong>
+          <strong className="pl-0 p-2">RADIO STAR</strong>
 
         </a>
         </Link>
