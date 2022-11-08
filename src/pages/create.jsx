@@ -61,7 +61,10 @@ export default function Create({ }) {
         // call smart contract
 
         // Get token id from smart contract success event
+        // createRadioStar(uint256 supply, uint256 priceInGwei)
         const tokenId = '';
+
+        // ...don't proceed posting to endpoint until smart contract call is successful
 
         // Log
         console.dir({
@@ -111,36 +114,36 @@ export default function Create({ }) {
         <div className="container mx-auto p-5">
            <h1 className="text-center text-lg font-bold">Create</h1>
 
-            <div className="py-12 flex justify-evenly items-start">
+            <div className="py-12 flex justify-evenly items-start flex-wrap">
                 <form onSubmit={onSubmit}>
+                  {/* TODO addd supply andd price fields */}
+                  
                     <input ref={artistAddress}  type="text" name="artistAddress" hidden readOnly value={account.toLowerCase()} />
                     <label className="block font-semibold text-sm text-gray-900">
                         Artist Name
                         <input ref={artistName} required type="text" name="artistName" placeholder="ex. Buddy Holly" className="w-96 mt-2 block rounded border-solid border-2 border-gray-900 p-4 focus:outline-none" />
                     </label>
-                    <fieldset className="my-6">
-                        <legend className="font-bold">Song</legend>
-                        <div className="pt-4">
-                        <label className="block font-semibold text-sm text-gray-900">
-                            Title
+
+                        <label className="block font-semibold text-sm text-gray-900 mt-6">
+                            Song Title
                             <input ref={name} required type="text" name="name" placeholder="ex. That'll Be the Day" className="w-96 mt-2 block rounded border-solid border-2 border-gray-900 p-4 focus:outline-none" />
                         </label>
-                        <label className="block font-semibold text-sm text-gray-900 mt-4">
-                            Description
-                            <textarea ref={description} required maxlength="200" rows="5" type="text" name="description" placeholder="ex. Recorded in Clovis, New Mexico, in February 1957..." className="w-96 mt-2 block rounded border-solid border-2 border-gray-900 p-4 focus:outline-none" />
+                        <label className="block font-semibold text-sm text-gray-900 mt-6">
+                            Song Description
+                            <textarea ref={description} required maxlength="200" rows="3" type="text" name="description" placeholder="ex. Recorded in Clovis, New Mexico, in February 1957..." className="w-96 mt-2 block rounded border-solid border-2 border-gray-900 p-4 focus:outline-none" />
                         </label>
-                        <label className="block font-semibold text-sm text-gray-900 mt-4">
+                        <label className="block font-semibold text-sm text-gray-900 mt-6">
                             Cover Art (png, jpg)
                             <input ref={image} required type="file" name="image" accept="image/png, image/jpeg" className="cursor-pointer w-96 mt-2 block rounded border-solid border-2 border-gray-900 p-4 focus:outline-none" />
                         </label>
-                        <label className="block font-semibold text-sm text-gray-900 mt-4">
+                        <label className="block font-semibold text-sm text-gray-900 mt-6">
                             File (mp3)
                             <input ref={animation} required type="file" name="animation" className="cursor-pointer w-96 mt-2 block rounded border-solid border-2 border-gray-900 p-4 focus:outline-none" />
                         </label>
-                        </div>
-                    </fieldset>
 
-                    <input type="submit" value="Create NFT" className="w-96 cursor-pointer mt-2 block text-white rounded border-solid border-2 bg-gray-900 border-gray-900 p-4 focus:outline-none" />
+
+
+                    <input type="submit" value="Create NFT" className="mt-8 mb-8 w-96 cursor-pointer mt-2 block text-white rounded border-solid border-2 bg-gray-900 border-gray-900 p-4 focus:outline-none" />
                 </form>
 
                 <div>
