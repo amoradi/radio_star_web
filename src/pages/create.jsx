@@ -26,13 +26,6 @@ const convertBase64 = (file) => {
     });
 };
 
-// const uploadImage = async (event) => {
-//     const file = event.target.files[0];
-//     const base64 = await convertBase64(file);
-//     avatar.src = base64;
-//     textArea.innerText = base64;
-// };
-
 export default function Create({ }) {
   const account = useAccount();
   const [submitMsg, setSubmitMsg] = useState(null);
@@ -57,15 +50,6 @@ export default function Create({ }) {
         // Stop default form submission
         e.preventDefault();
 
-        // TODO:
-        // call smart contract
-
-        // Get token id from smart contract success event
-        // createRadioStar(uint256 supply, uint256 priceInGwei)
-        const tokenId = '';
-
-        // ...don't proceed posting to endpoint until smart contract call is successful
-
         // Log
         console.dir({
             artistAddress: artistAddress.current.value,
@@ -87,24 +71,33 @@ export default function Create({ }) {
         titlePrev.current.innerHTML = name.current.value;
         filePrev.current.innerHTML = animation.current.files[0].name;
 
-        // POST to REST endpoint
-        const response = await axios.post("/api/nfts/", 
-          {
-            tokenId: 'foo_bar',
-            artistAddress: artistAddress.current.value,
-            artistName: artistName.current.value,
-            name: name.current.value,
-            description: description.current.value,
-            image: base64,
-            animation: songBase64
-        });
+        // POST to IPFS service
+        try {
+          const response = await axios.post("/api/nfts/", 
+            {
+              // tokenId: 'foo_bar',
+              artistAddress: artistAddress.current.value,
+              artistName: artistName.current.value,
+              name: name.current.value,
+              description: description.current.value,
+              image: base64,
+              animation: songBase64
+          });
+          
+          console.log('POST RESP:', response);
 
-        console.log(response);
+          if (response.status === 200) {
+            // TODO:
+            // call smart contract, send metadata CID
+            // createRadioStar(uint256 supply, uint256 priceInGwei)
 
-        if (response.status === 200) {
-          setSubmitMsg(200);
-        } else {
-          setSubmitMsg(response.statusText);
+            setSubmitMsg(200);
+          } else {
+            setSubmitMsg(response.statusText);
+          }
+        } catch(e) {
+          setSubmitMsg(e.toString());
+          console.error(e);
         }
 
         setIsSubmitting(false);
@@ -117,7 +110,7 @@ export default function Create({ }) {
             <div className="py-12 flex justify-evenly items-start flex-wrap">
                 <form onSubmit={onSubmit}>
                   {/* TODO addd supply andd price fields */}
-                  
+
                     <input ref={artistAddress}  type="text" name="artistAddress" hidden readOnly value={account.toLowerCase()} />
                     <label className="block font-semibold text-sm text-gray-900">
                         Artist Name
@@ -130,7 +123,7 @@ export default function Create({ }) {
                         </label>
                         <label className="block font-semibold text-sm text-gray-900 mt-6">
                             Song Description
-                            <textarea ref={description} required maxlength="200" rows="3" type="text" name="description" placeholder="ex. Recorded in Clovis, New Mexico, in February 1957..." className="w-96 mt-2 block rounded border-solid border-2 border-gray-900 p-4 focus:outline-none" />
+                            <textarea ref={description} required maxLength="200" rows="3" type="text" name="description" placeholder="ex. Recorded in Clovis, New Mexico, in February 1957..." className="w-96 mt-2 block rounded border-solid border-2 border-gray-900 p-4 focus:outline-none" />
                         </label>
                         <label className="block font-semibold text-sm text-gray-900 mt-6">
                             Cover Art (png, jpg)
@@ -157,7 +150,7 @@ export default function Create({ }) {
                     </div>
                     {isSubmitting && <div className="bg-gray-100 text-gray-400 border-dashed border-gray-300 border-4 my-8 text-center font-bold py-8 p-4">...Creating...</div>}
                     {submitMsg === 200 && <div className="bg-emerald-100 text-emerald-400 border-dashed border-emerald-300 border-4 my-8 text-center font-bold py-8 p-4">NFT Created</div>}
-                    {submitMsg !== null && submitMsg !== 200 && <div className="bg-red-100 text-red-400 border-dashed border-red-300 border-4 my-8 text-center font-bold py-8 p-4">Error {submitMsg}</div>}
+                    {submitMsg !== null && submitMsg !== 200 && <div className="max-w-sm bg-red-100 text-red-400 border-dashed border-red-300 border-4 my-8 text-center font-bold py-8 p-4">Error {submitMsg}</div>}
                 </div>
                 </div>  
         
