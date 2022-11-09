@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import axios from 'axios';
 
 import { useRouter } from 'next/router'
 import Head from "next/head";
@@ -13,7 +14,8 @@ import { toastSuccessMessage, toastErrorMessage } from "utils/toast";
 export default function Profile({ }) {
     const router = useRouter();
     const [tabIndex, setTabIndex] = useState(0);
-    
+    const [created, setCreated] = useState([]);
+
     useEffect(() => {
         if ("collected" in router.query) {
             setTabIndex(1);
@@ -21,6 +23,29 @@ export default function Profile({ }) {
             setTabIndex(0);
         }
     },[router.query]);
+
+    useEffect(() => {
+      const getNfts = (async () => {
+        try {
+          // Created
+          if (tabIndex === 0) {
+            // Call contract, get all token metadata CIDs associated with address.
+            console.log('REQ nfts');
+            const response = await axios.get("/api/nfts/", { params: {
+              cids: 'QmagygrSKgPt6iFbhc8u9s2JmDqLH3iHDNBLVtKtu9Ky7r', // Hardcoded for now, until contract call is made.
+            }});
+
+            console.log('Created flow >>>', response, JSON.parse(response.data.nfts))
+            setCreated(response.data.nfts.map((n) => JSON.parse(n)));
+          } else {
+            // Collected
+
+          }
+        } catch(e) {
+          console.log(e);
+        }
+      })();
+    }, [tabIndex]);
 
     return (
         <div className="container mx-auto p-5">
@@ -39,6 +64,16 @@ export default function Profile({ }) {
                 <TabPanel>
                 <div className="py-6">
                 <h2>Created NFTs content</h2>
+                {created.map((created) => <div>
+                    <div className="border-2 mt-2 border-gray-900 rounded">
+                      <div className="w-96 h-72 bg-gray-100 bg-contain" style={{ backgroundImage: `url(${created.image})` }}></div>
+                      <div className="border-t-2 border-gray-900 p-4">
+                          <div>{`<title>`}</div>
+                          <div>{`<filename>`}</div>
+                      </div>
+                    </div>
+                </div>)}
+
                 </div>
                 </TabPanel>
                 <TabPanel>

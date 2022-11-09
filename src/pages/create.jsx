@@ -89,7 +89,7 @@ export default function Create({ }) {
           if (response.status === 200) {
             // TODO:
             // call smart contract, send metadata CID
-            // createRadioStar(uint256 supply, uint256 priceInGwei)
+            // createRadioStar(uint256 supply, uint256 priceInGwei, string cid ???? )
 
             setSubmitMsg(200);
           } else {
