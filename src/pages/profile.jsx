@@ -39,8 +39,47 @@ export default function Profile({ }) {
 
             // Looks like you cannot get the entire mapping without creating a getter...
             // https://ethereum.stackexchange.com/questions/121069/how-to-properly-call-solidity-mapping-in-ethers-js
-            const tokensToArtist = await radioStarContract.tokensToArtist(1);
-            console.log('tokensToArtist', tokensToArtist);
+            
+            const tokenIds = [];
+            let increment = 1;
+            let hasReachedZeroAddress = false; // Stinks assumes increment/know about implementation details.
+
+            const pAccount = parseInt(account, 16);
+            while(!hasReachedZeroAddress) {
+              const artist = await radioStarContract.tokensToArtist(increment);
+              const pArtist = parseInt(artist, 16);
+
+              console.log('artist', artist, account, pAccount, pArtist, pAccount == pArtist);
+
+              if (pAccount === pArtist) {
+                tokenIds.push(increment);
+              }
+              
+              increment++;
+              hasReachedZeroAddress = pArtist === 0;
+            }
+
+            console.log('token ids', tokenIds);
+
+
+            const cids = [];
+            for (let i = 0, ii = tokenIds.length; i < ii; i ++) {
+              const cid = await radioStarContract.uri(tokenIds[i]);
+
+              cids.push(cid);
+            }
+
+            console.log('cids', cids);
+
+            // const songMetadatas = [];
+            // for (let i = 0, ii = cids.length; i < ii; i ++) {
+            //   const songMetdata = await ipfs.get(ipfsClient, cids[i]);
+
+            //   songMetadatas.push(songMetdata);
+            // }
+
+            const songMetadata = await ipfs.get(ipfsClient, cids);
+            console.log('songMetadatas', songMetadata, cids[0]);
 
             // get CID
             // given user address
@@ -50,8 +89,6 @@ export default function Profile({ }) {
             //
             // const songsMetadata = await ipfs.get(node, ['QmagygrSKgPt6iFbhc8u9s2JmDqLH3iHDNBLVtKtu9Ky7r']);
 
-            //console.log('ipfs.get() ->', songsMetadata);
-            // setCreated(songsMetadata.map((n) => JSON.parse(n)));
           } else {
             // Collected
 
