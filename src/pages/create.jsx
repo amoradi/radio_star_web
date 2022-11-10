@@ -30,7 +30,9 @@ const convertBase64 = (file) => {
 
 export default function Create({ }) {
   const account = useAccount();
-  const { node } = useIpfs();
+  const { ipfsClient } = useIpfs();
+  const { radioStarContract } = useContracts();
+
   const [cidCreationSuccess, setCidCreationSuccess] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(null);
 
@@ -47,6 +49,7 @@ export default function Create({ }) {
   const titlePrev = useRef(null);
   const filePrev = useRef(null);
   
+  console.log('radioStarContract >>', radioStarContract);
   const onSubmit = async (e) => {
     setIsSubmitting(true);
 
@@ -64,7 +67,7 @@ export default function Create({ }) {
     titlePrev.current.innerHTML = name.current.value;
     filePrev.current.innerHTML = animation.current.files[0].name;
 
-    const cid = await ipfs.add(node, {
+    const cid = await ipfs.add(ipfsClient, {
       // tokenId: 'foo_bar',
       artistAddress: artistAddress.current.value,
       artistName: artistName.current.value,
@@ -75,6 +78,7 @@ export default function Create({ }) {
     });
 
     console.log('CID >>', cid);
+    console.log('radioStarContract >>', radioStarContract);
     // TODO:
     // call smart contract, send metadata CID
     // createRadioStar(uint256 supply, uint256 priceInGwei, string cid ???? )

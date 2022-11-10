@@ -1,11 +1,6 @@
 import { useEffect, useState } from "react";
 import Head from "next/head";
-// import { create } from 'ipfs-core'
 import { create } from 'ipfs-http-client';
-
-// connect to the default API address http://localhost:5001
-// const client = create()
-
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -31,6 +26,7 @@ function MyApp({ Component, pageProps }) {
   const [contracts, setContracts] = useState({
     radioStar: null,
   });
+  const [ipfsClient, setIpfsClient] = useState(null);
 
   const load = async () => {
     const ethereum = getEthereumObject();
@@ -55,18 +51,12 @@ function MyApp({ Component, pageProps }) {
     load();
   }, []);
 
-  // IPFS 
-  const [id, setId] = useState(null);
-  const [ipfs, setIpfs] = useState(null);
-  const [version, setVersion] = useState(null);
-  const [isOnline, setIsOnline] = useState(false);
-
   useEffect(() => {
-    const init = async () => {
-      if (ipfs) return
+    const initIpfsClient = async () => {
+      if (ipfsClient) return
 
       const auth = 'Basic ' + Buffer.from(process.env.NEXT_PUBLIC_INFURA_PROJECT_ID + ':' + process.env.NEXT_PUBLIC_INFURA_SECRET).toString('base64');
-      const node = create({
+      const client = create({
         host: 'ipfs.infura.io',
         port: 5001,
         protocol: 'https',
@@ -76,7 +66,7 @@ function MyApp({ Component, pageProps }) {
       });
       // timeout: 10000
 
-      setIpfs(node);
+      setIpfsClient(client);
 
       // console.log(node)
       // const c = await node.add('Hello world!')
@@ -94,20 +84,10 @@ function MyApp({ Component, pageProps }) {
       //     console.log('GET >>> 5');
       //     data += decoder.decode(chunk, { stream: true });
       // }
-
-      //console.log('data', data);
-      //const nodeId = await node.id();
-      // const nodeVersion = await node.version();
-      // const nodeIsOnline = node.isOnline();
-
-      // setIpfs(node);
-      // setId(nodeId.id);
-      // setVersion(nodeVersion.version);
-      // setIsOnline(nodeIsOnline);
     }
 
-    init()
-  }, [ipfs]);
+    initIpfsClient()
+  }, [ipfsClient]);
 
  return (
     <>
@@ -115,22 +95,23 @@ function MyApp({ Component, pageProps }) {
         <title>Radio Star</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
-      {isOnline &&
-      <AccountContext.Provider value={account}>
-        <IpfsContext.Provider value={{ node: ipfs }}>
-          <ContractsContext.Provider value={contracts}>
-            <ToastContainer
-              position="bottom-center"
-              autoClose={5000}
-              closeOnClick
-              pauseOnFocusLoss
-              draggable
-              pauseOnHover
-            />
-            {getLayout(<Component {...pageProps} />)}
-          </ContractsContext.Provider>
-        </IpfsContext.Provider>
-      </AccountContext.Provider>}
+      {ipfsClient &&
+        <AccountContext.Provider value={account}>
+          <IpfsContext.Provider value={{ ipfsClient }}>
+            <ContractsContext.Provider value={contracts}>
+              <ToastContainer
+                position="bottom-center"
+                autoClose={5000}
+                closeOnClick
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+              />
+              {getLayout(<Component {...pageProps} />)}
+            </ContractsContext.Provider>
+          </IpfsContext.Provider>
+        </AccountContext.Provider>
+        }
     </>
   );
 }

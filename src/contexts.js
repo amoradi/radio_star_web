@@ -1,8 +1,7 @@
 import { createContext, useContext } from 'react';;
 
 export const IpfsContext = createContext({
-    node: null,
-    isOnline: false,
+    ipfsClient: null,
 });
 export const AccountContext = createContext("");
 export const ContractsContext = createContext({

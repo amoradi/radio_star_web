@@ -13,7 +13,7 @@ import { toastSuccessMessage, toastErrorMessage } from "utils/toast";
 
 export default function Profile({ }) {
     const router = useRouter();
-    const { node } = useIpfs();
+    const { ipfsClient } = useIpfs();
     const [tabIndex, setTabIndex] = useState(0);
     const [created, setCreated] = useState([]);
 
