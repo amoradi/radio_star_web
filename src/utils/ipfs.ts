@@ -38,31 +38,33 @@ export async function get(node, metadataCids = []) {
     try {
         const songsMetadata = [];
         // Just get 1st one for now. TODO: Fix this.
-        const cid = metadataCids[0];
-        console.log('GET >>>', cid);
-        console.log('GET >>> 2');
+        for (let i = 0, ii = metadataCids.length; i < ii; i++) {
+            const cid = metadataCids[i];
+            console.log('GET >>>', cid);
+            console.log('GET >>> 2');
 
-        //((req.query?.cids || '').split(',') || []).forEach(async (cid) => {
+            //((req.query?.cids || '').split(',') || []).forEach(async (cid) => {
 
-        
-        console.log('GET >>> 3', cid);
-        if (!cid) {
-            return [];
-        }
+            
+            console.log('GET >>> 3', cid);
+            if (!cid) {
+                return [];
+            }
 
-        const stream = node.cat(cid);
-        const decoder = new TextDecoder();
-        let data = ''
+            const stream = node.cat(cid);
+            const decoder = new TextDecoder();
+            let data = ''
 
-        console.log('GET >>> 4', stream);
-        for await (const chunk of stream) {
-            // chunks of data are returned as a Uint8Array, convert it back to a string
-            console.log('GET >>> 5');
-            data += decoder.decode(chunk, { stream: true });
-        }
+            console.log('GET >>> 4', stream);
+            for await (const chunk of stream) {
+                // chunks of data are returned as a Uint8Array, convert it back to a string
+                console.log('GET >>> 5');
+                data += decoder.decode(chunk, { stream: true });
+            }
 
-        console.log('GET >>> 6');
-        songsMetadata.push(data);
+            console.log('GET >>> 6');
+            songsMetadata.push(data);
+        };
         
         console.log('songsMetadata >>', songsMetadata)
         return songsMetadata;

@@ -49,8 +49,6 @@ export default function Profile({ }) {
               const artist = await radioStarContract.tokensToArtist(increment);
               const pArtist = parseInt(artist, 16);
 
-              console.log('artist', artist, account, pAccount, pArtist, pAccount == pArtist);
-
               if (pAccount === pArtist) {
                 tokenIds.push(increment);
               }
@@ -61,7 +59,6 @@ export default function Profile({ }) {
 
             console.log('token ids', tokenIds);
 
-
             const cids = [];
             for (let i = 0, ii = tokenIds.length; i < ii; i ++) {
               const cid = await radioStarContract.uri(tokenIds[i]);
@@ -71,23 +68,17 @@ export default function Profile({ }) {
 
             console.log('cids', cids);
 
-            // const songMetadatas = [];
-            // for (let i = 0, ii = cids.length; i < ii; i ++) {
-            //   const songMetdata = await ipfs.get(ipfsClient, cids[i]);
+            const songMetadatas = await ipfs.get(ipfsClient, cids);
+            let pSongMetadatas = [];
+            try {
+              pSongMetadatas = songMetadatas.map((m) => JSON.parse(m));
+            } catch(e) {
+              console.error(e);
+              pSongMetadatas = [];
+            }
 
-            //   songMetadatas.push(songMetdata);
-            // }
-
-            const songMetadata = await ipfs.get(ipfsClient, cids);
-            console.log('songMetadatas', songMetadata, cids[0]);
-
-            // get CID
-            // given user address
-            // - get all token associated with said user
-            // - given all tokens
-            // - get all tokenUri's
-            //
-            // const songsMetadata = await ipfs.get(node, ['QmagygrSKgPt6iFbhc8u9s2JmDqLH3iHDNBLVtKtu9Ky7r']);
+            console.log('songMetadatas', pSongMetadatas);
+            setCreated(pSongMetadatas);
 
           } else {
             // Collected
@@ -99,12 +90,13 @@ export default function Profile({ }) {
       })();
     }, [tabIndex]);
 
+    console.log('created', created);
     return (
         <div className="container mx-auto p-5">
           <h1 className="text-center text-lg font-bold">Profile</h1>
 
           <div className="py-12">
-            DASHBOARD/DATA HERE
+           
           </div>  
 
             <Tabs selectedIndex={tabIndex} onSelect={(index) => setTabIndex(index)}>
@@ -114,14 +106,13 @@ export default function Profile({ }) {
                 </TabList>
 
                 <TabPanel>
-                <div className="py-6">
-                <h2>Created NFTs content</h2>
-                {created.map((created, i) => <div>
+                <div className="py-6 flex flex-wrap gap-4">
+                {created.map((created, i) => <div className="inline-block">
                     <div className="border-2 mt-2 border-gray-900 rounded" key={i}>
-                      <div className="w-96 h-72 bg-gray-100 bg-contain" style={{ backgroundImage: `url(${created.image})` }}></div>
-                      <div className="border-t-2 border-gray-900 p-4">
-                          <div>{`<title>`}</div>
-                          <div>{`<filename>`}</div>
+                      <div className="w-48 h-36 bg-gray-100 bg-contain" style={{ backgroundImage: `url(${created.image})` }}></div>
+                      <div className="border-t-2 border-gray-900 p-2">
+                          <div>{created.name}</div>
+                          <div>{created.attributes[0]?.trait_type}</div>
                       </div>
                     </div>
                 </div>)}
