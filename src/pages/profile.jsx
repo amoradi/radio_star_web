@@ -16,6 +16,7 @@ export default function Profile({ }) {
     const { ipfsClient } = useIpfs();
     const { radioStarContract } = useContracts();
     const account = useAccount();
+    const [isLoading, setIsLoading] = useState(false);
 
     const [tabIndex, setTabIndex] = useState(0);
     const [created, setCreated] = useState([]);
@@ -30,6 +31,7 @@ export default function Profile({ }) {
 
     useEffect(() => {
       const getNfts = (async () => {
+        setIsLoading(true);
         try {
           // Created
           if (tabIndex === 0) {
@@ -87,8 +89,9 @@ export default function Profile({ }) {
         } catch(e) {
           console.log(e);
         }
+        setIsLoading(false);
       })();
-    }, [tabIndex]);
+    }, [tabIndex, account]);
 
     console.log('created', created);
     return (
@@ -107,7 +110,8 @@ export default function Profile({ }) {
 
                 <TabPanel>
                 <div className="py-6 flex flex-wrap gap-4">
-                {created.map((created, i) => <div className="inline-block">
+                  {isLoading && <div className="m-auto p-20"><Spinner /></div> }
+                {!isLoading && created.map((created, i) => <div className="inline-block">
                     <div className="border-2 mt-2 border-gray-900 rounded" key={i}>
                       <div className="w-48 h-36 bg-gray-100 bg-contain" style={{ backgroundImage: `url(${created.image})` }}></div>
                       <div className="border-t-2 border-gray-900 p-2">
