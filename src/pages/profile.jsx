@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import axios from 'axios';
 
 import { useRouter } from 'next/router'
 import Head from "next/head";
 
+import * as ipfs from 'utils/ipfs';
 import Layout from "components/Layout";
 import Spinner from "components/Spinner";
 
-import { useContracts } from "contexts";
+import { useContracts, useIpfs } from "contexts";
 import { toastSuccessMessage, toastErrorMessage } from "utils/toast";
 
 export default function Profile({ }) {
     const router = useRouter();
+    const { node } = useIpfs();
     const [tabIndex, setTabIndex] = useState(0);
     const [created, setCreated] = useState([]);
 
@@ -30,13 +31,11 @@ export default function Profile({ }) {
           // Created
           if (tabIndex === 0) {
             // Call contract, get all token metadata CIDs associated with address.
-            console.log('REQ nfts');
-            const response = await axios.get("/api/nfts/", { params: {
-              cids: 'QmagygrSKgPt6iFbhc8u9s2JmDqLH3iHDNBLVtKtu9Ky7r', // Hardcoded for now, until contract call is made.
-            }});
+            console.log('ipfs.get()...', node);
+            // const songsMetadata = await ipfs.get(node, ['QmagygrSKgPt6iFbhc8u9s2JmDqLH3iHDNBLVtKtu9Ky7r']);
 
-            console.log('Created flow >>>', response, JSON.parse(response.data.nfts))
-            setCreated(response.data.nfts.map((n) => JSON.parse(n)));
+            //console.log('ipfs.get() ->', songsMetadata);
+            // setCreated(songsMetadata.map((n) => JSON.parse(n)));
           } else {
             // Collected
 
@@ -64,8 +63,8 @@ export default function Profile({ }) {
                 <TabPanel>
                 <div className="py-6">
                 <h2>Created NFTs content</h2>
-                {created.map((created) => <div>
-                    <div className="border-2 mt-2 border-gray-900 rounded">
+                {created.map((created, i) => <div>
+                    <div className="border-2 mt-2 border-gray-900 rounded" key={i}>
                       <div className="w-96 h-72 bg-gray-100 bg-contain" style={{ backgroundImage: `url(${created.image})` }}></div>
                       <div className="border-t-2 border-gray-900 p-4">
                           <div>{`<title>`}</div>
@@ -102,43 +101,6 @@ export default function Profile({ }) {
 //     }
 //     setIsMinting(false);
 //   };
-
-  return (
-    <div className="mx-auto mt-8 max-w-7xl p-4">
-      <section className="body-font text-gray-600">
-        <div className="border-1 m-auto flex flex-col rounded-lg border-gray-100 p-8 md:w-1/2 lg:w-2/6">
-          <h2 className="title-font mb-5 text-lg font-medium ">
-            Immortalize your creation
-          </h2>
-          <div className="relative mb-4">
-            <label className="text-sm leading-7">
-              Mint new NFT to this address
-            </label>
-            <input
-              type="text"
-              className="w-full rounded border border-gray-300 bg-white py-1 px-3 text-base leading-8 outline-none transition-colors duration-200 ease-in-out focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
-              value={mintAddress}
-              placeholder="0x14dc79964da2c08b23698b3d3cc7ca32193d9955"
-              onChange={(e) => setMintAddress(e.target.value)}
-            />
-          </div>
-          {!isMinting && (
-            <button
-              className="rounded border-0 bg-indigo-500 py-2 px-8 text-lg text-white hover:bg-indigo-600 focus:outline-none"
-              onClick={() => mintNft(mintAddress)}
-            >
-              Mint item
-            </button>
-          )}
-          {isMinting && (
-            <div className="mt-1">
-              <Spinner />
-            </div>
-          )}
-        </div>
-      </section>
-    </div>
-  );
 }
 
 Profile.getLayout = function getLayout(page) {

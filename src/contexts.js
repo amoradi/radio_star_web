@@ -1,13 +1,17 @@
 import { createContext, useContext } from 'react';;
 
+export const IpfsContext = createContext({
+    node: null,
+    isOnline: false,
+});
 export const AccountContext = createContext("");
 export const ContractsContext = createContext({
-    // TODO: Update these.
-    campContract: null,
-    dcWarriorsContract: null,
-    stakingContract: null
+    radioStartContract: null
 })
 
+export function useIpfs() {
+    return useContext(IpfsContext);
+}
 export function useAccount() {
     return useContext(AccountContext);
 }

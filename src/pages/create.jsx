@@ -5,10 +5,12 @@ import axios from 'axios';
 import { useRouter } from 'next/router'
 import Head from "next/head";
 
+import * as ipfs from 'utils/ipfs';
 import Layout from "components/Layout";
 import Spinner from "components/Spinner";
 
-import { useAccount, useContracts } from "contexts";
+import { useAccount, useContracts, useIpfs } from "contexts";
+// TODO: Could use these toasts instead of the custom ones.
 import { toastSuccessMessage, toastErrorMessage } from "utils/toast";
 
 const convertBase64 = (file) => {
@@ -28,80 +30,59 @@ const convertBase64 = (file) => {
 
 export default function Create({ }) {
   const account = useAccount();
-  const [submitMsg, setSubmitMsg] = useState(null);
+  const { node } = useIpfs();
+  const [cidCreationSuccess, setCidCreationSuccess] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(null);
 
-    // artist refs
-    const artistAddress = useRef(null);
-    const artistName = useRef(null);
-    // song refs
-    const name = useRef(null);
-    const description = useRef(null);
-    const image = useRef(null);
-    const animation = useRef(null);
-    // preview
-    const imagePrev = useRef(null);
-    const titlePrev = useRef(null);
-    const filePrev = useRef(null);
-    
-    const onSubmit = async (e) => {
-      setIsSubmitting(true);
+  // artist refs
+  const artistAddress = useRef(null);
+  const artistName = useRef(null);
+  // song refs
+  const name = useRef(null);
+  const description = useRef(null);
+  const image = useRef(null);
+  const animation = useRef(null);
+  // preview
+  const imagePrev = useRef(null);
+  const titlePrev = useRef(null);
+  const filePrev = useRef(null);
+  
+  const onSubmit = async (e) => {
+    setIsSubmitting(true);
 
-        // Stop default form submission
-        e.preventDefault();
+    // Stop default form submission
+    e.preventDefault();
 
-        // Log
-        console.dir({
-            artistAddress: artistAddress.current.value,
-            artistName: artistName.current.value,
-            name: name.current.value,
-            description: description.current.value,
-            image: image.current.files[0],
-            animation: animation.current.files[0]
-        });
+    // Encode cover art and song files
+    const file = image.current.files[0];
+    const base64 = await convertBase64(file);
+    const songFile = animation.current.files[0];
+    const songBase64 = await convertBase64(songFile);
 
-        // Encode cover art and song files
-        const file = image.current.files[0];
-        const base64 = await convertBase64(file);
-        const songFile = animation.current.files[0];
-        const songBase64 = await convertBase64(songFile);
+    // Set preview
+    imagePrev.current.style.backgroundImage = `url(${base64})`;
+    titlePrev.current.innerHTML = name.current.value;
+    filePrev.current.innerHTML = animation.current.files[0].name;
 
-        // Set preview
-        imagePrev.current.style.backgroundImage = `url(${base64})`;
-        titlePrev.current.innerHTML = name.current.value;
-        filePrev.current.innerHTML = animation.current.files[0].name;
+    const cid = await ipfs.add(node, {
+      // tokenId: 'foo_bar',
+      artistAddress: artistAddress.current.value,
+      artistName: artistName.current.value,
+      name: name.current.value,
+      description: description.current.value,
+      image: base64,
+      animation: songBase64
+    });
 
-        // POST to IPFS service
-        try {
-          const response = await axios.post("/api/nfts/", 
-            {
-              // tokenId: 'foo_bar',
-              artistAddress: artistAddress.current.value,
-              artistName: artistName.current.value,
-              name: name.current.value,
-              description: description.current.value,
-              image: base64,
-              animation: songBase64
-          });
-          
-          console.log('POST RESP:', response);
+    console.log('CID >>', cid);
+    // TODO:
+    // call smart contract, send metadata CID
+    // createRadioStar(uint256 supply, uint256 priceInGwei, string cid ???? )
 
-          if (response.status === 200) {
-            // TODO:
-            // call smart contract, send metadata CID
-            // createRadioStar(uint256 supply, uint256 priceInGwei, string cid ???? )
-
-            setSubmitMsg(200);
-          } else {
-            setSubmitMsg(response.statusText);
-          }
-        } catch(e) {
-          setSubmitMsg(e.toString());
-          console.error(e);
-        }
-
-        setIsSubmitting(false);
-    }
+    // capture contract event to determine success
+    setCidCreationSuccess(!!cid);
+    setIsSubmitting(false);
+  }
 
     return (
         <div className="container mx-auto p-5">
@@ -149,63 +130,11 @@ export default function Create({ }) {
                       </div>
                     </div>
                     {isSubmitting && <div className="bg-gray-100 text-gray-400 border-dashed border-gray-300 border-4 my-8 text-center font-bold py-8 p-4">...Creating...</div>}
-                    {submitMsg === 200 && <div className="bg-emerald-100 text-emerald-400 border-dashed border-emerald-300 border-4 my-8 text-center font-bold py-8 p-4">NFT Created</div>}
-                    {submitMsg !== null && submitMsg !== 200 && <div className="max-w-sm bg-red-100 text-red-400 border-dashed border-red-300 border-4 my-8 text-center font-bold py-8 p-4">Error {submitMsg}</div>}
+                    {cidCreationSuccess && <div className="bg-emerald-100 text-emerald-400 border-dashed border-emerald-300 border-4 my-8 text-center font-bold py-8 p-4">NFT Created</div>}
+                    {cidCreationSuccess !== null && !cidCreationSuccess && <div className="max-w-sm bg-red-100 text-red-400 border-dashed border-red-300 border-4 my-8 text-center font-bold py-8 p-4">Error</div>}
                 </div>
                 </div>  
         
-            <br />
-            <br />
-                <pre>
-                    
-                    
-                    {  `
-                        //
-                        // create/
-                        //
-                        // fill-out form
-                        // pre-fill artist with user.address
-                        // FE validation only
-                        //
-                        // on submit
-                        // - call smart contract?
-                        // - on event success
-                        //   - proceed to post to data store
-                        //   - if post failed. revert on Smart Contract?
-                        //   - on success, toast a success message. clear form.
-                        //
-                        // 
-                        // profile/
-                        //
-                        // created...
-                        // - list your created NFTs here
-                        // 
-                        // collected...
-                        // - query user.address for tokenId
-                        // - query REST API for ... GET nftsById's
-                        //
-                        //
-                        // home/
-                        // - query REST, GET nfts (ALL)
-                        // - list them
-                        //
-
-                        description: <song title> by <artist>,
-                        image: https://<link to song cover art image>,
-                        name: <name of song>,
-                        animation_url: https://<link to mp3 of song>,
-                        attributes: [
-                                {
-                                trait_type: Artist Name,
-                                value: <artist name>,
-                                },
-                            }
-                        `
-                    }
-                    
-                     
-                        
-                </pre>
                 </div>
     );
 
