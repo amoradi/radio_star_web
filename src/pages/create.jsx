@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import axios from 'axios';
 
 import { useRouter } from 'next/router'
 import Head from "next/head";
@@ -44,12 +43,13 @@ export default function Create({ }) {
   const description = useRef(null);
   const image = useRef(null);
   const animation = useRef(null);
+  const price = useRef(null);
+  const supply = useRef(null);
   // preview
   const imagePrev = useRef(null);
   const titlePrev = useRef(null);
   const filePrev = useRef(null);
   
-  console.log('radioStarContract >>', radioStarContract);
   const onSubmit = async (e) => {
     setIsSubmitting(true);
 
@@ -74,14 +74,34 @@ export default function Create({ }) {
       name: name.current.value,
       description: description.current.value,
       image: base64,
-      animation: songBase64
+      animation: songBase64,
+      price: price.current.value,
+      supply: supply.current.value,
     });
 
     console.log('CID >>', cid);
     console.log('radioStarContract >>', radioStarContract);
-    // TODO:
-    // call smart contract, send metadata CID
-    // createRadioStar(uint256 supply, uint256 priceInGwei, string cid ???? )
+   
+    if (cid) {
+      try {
+        // QUESTION: 
+        // Make radioStarContract return a success/token/predicate for "success"?
+        // Does not failing mean success? (I've witnessed this throwing and entering the catch block from passing extra args.)
+        console.log('radioStarContract.createRadioStar(', supply.current.value, price.current.value, cid)
+        const success = await radioStarContract.createRadioStar(supply.current.value, price.current.value, cid);
+
+        //
+        // In the future, for other viewss, use to get tokenUri (AKA metadata CID)
+        // function uri(uint256 tokenId) public view virtual override returns (string memory) { ...
+        // 
+
+        toastSuccessMessage(`🦄 NFT was successfully minted!`);
+      } catch (e) {
+        toastErrorMessage(
+          `Couldn't mint nft. Please check the address or try again later.`
+        );
+      }
+    }
 
     // capture contract event to determine success
     setCidCreationSuccess(!!cid);
@@ -117,6 +137,14 @@ export default function Create({ }) {
                         <label className="block font-semibold text-sm text-gray-900 mt-6">
                             File (mp3)
                             <input ref={animation} required type="file" name="animation" className="cursor-pointer w-96 mt-2 block rounded border-solid border-2 border-gray-900 p-4 focus:outline-none" />
+                        </label>
+                        <label className="block font-semibold text-sm text-gray-900 mt-6">
+                            Supply
+                            <input ref={supply} required type="number" max="100000" name="supply" placeholder="ex. 10" className="w-96 mt-2 block rounded border-solid border-2 border-gray-900 p-4 focus:outline-none" />
+                        </label>
+                        <label className="block font-semibold text-sm text-gray-900 mt-6">
+                            Price (Gwei)
+                            <input ref={price} required type="number" min="10000000" name="price" placeholder="ex. 10000000" className="w-96 mt-2 block rounded border-solid border-2 border-gray-900 p-4 focus:outline-none" />
                         </label>
 
 

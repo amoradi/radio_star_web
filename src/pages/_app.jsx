@@ -24,7 +24,7 @@ function MyApp({ Component, pageProps }) {
 
   const [account, setAccount] = useState(null);
   const [contracts, setContracts] = useState({
-    radioStar: null,
+    radioStarContract: null,
   });
   const [ipfsClient, setIpfsClient] = useState(null);
 

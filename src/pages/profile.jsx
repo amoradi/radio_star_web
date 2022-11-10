@@ -8,12 +8,15 @@ import * as ipfs from 'utils/ipfs';
 import Layout from "components/Layout";
 import Spinner from "components/Spinner";
 
-import { useContracts, useIpfs } from "contexts";
+import { useContracts, useIpfs, useAccount } from "contexts";
 import { toastSuccessMessage, toastErrorMessage } from "utils/toast";
 
 export default function Profile({ }) {
     const router = useRouter();
     const { ipfsClient } = useIpfs();
+    const { radioStarContract } = useContracts();
+    const account = useAccount();
+
     const [tabIndex, setTabIndex] = useState(0);
     const [created, setCreated] = useState([]);
 
@@ -31,7 +34,20 @@ export default function Profile({ }) {
           // Created
           if (tabIndex === 0) {
             // Call contract, get all token metadata CIDs associated with address.
-            console.log('ipfs.get()...', node);
+            console.log('ipfs.get()...', ipfsClient);
+            console.log('radioStarContract', radioStarContract);
+
+            // Looks like you cannot get the entire mapping without creating a getter...
+            // https://ethereum.stackexchange.com/questions/121069/how-to-properly-call-solidity-mapping-in-ethers-js
+            const tokensToArtist = await radioStarContract.tokensToArtist(1);
+            console.log('tokensToArtist', tokensToArtist);
+
+            // get CID
+            // given user address
+            // - get all token associated with said user
+            // - given all tokens
+            // - get all tokenUri's
+            //
             // const songsMetadata = await ipfs.get(node, ['QmagygrSKgPt6iFbhc8u9s2JmDqLH3iHDNBLVtKtu9Ky7r']);
 
             //console.log('ipfs.get() ->', songsMetadata);
