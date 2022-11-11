@@ -122,7 +122,7 @@ export default function Profile({ }) {
             <Tabs selectedIndex={tabIndex} onSelect={(index) => setTabIndex(index)}>
                 <TabList>
                 <Tab><span className="font-semibold block px-10 py-2">Created</span></Tab>
-                <Tab><span className="font-semibold block px-10 py-2">Collected</span></Tab>
+                <Tab><span className="font-semibold block px-10 py-2">Purchased</span></Tab>
                 </TabList>
 
                 <TabPanel>
