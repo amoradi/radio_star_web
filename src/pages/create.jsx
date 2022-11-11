@@ -81,7 +81,7 @@ export default function Create({ }) {
       price: price.current.value,
       supply: supply.current.value,
     });
-   
+    
     if (cid) {
       try {
         // QUESTION: 
@@ -93,76 +93,76 @@ export default function Create({ }) {
       } catch (e) {
         toastErrorMessage(
           `Could not create NFT. Please check the address or try again later.`
-        );
-      
+        ); 
     }
 
-    // capture contract event to determine success
-    setCidCreationSuccess(!!cid);
-    setIsSubmitting(false);
+      // capture contract event to determine success
+      setCidCreationSuccess(!!cid);
+      setIsSubmitting(false);
+    }
   }
 
-    return (
-        <div className="container mx-auto p-5">
-           <h1 className="text-center text-lg font-bold">Create</h1>
+  return (
+      <div className="container mx-auto p-5">
+          <h1 className="text-center text-lg font-bold">Create</h1>
 
-            <div className="py-12 flex justify-evenly items-start flex-wrap">
-                <form onSubmit={onSubmit}>
+          <div className="py-12 flex justify-evenly items-start flex-wrap">
+              <form onSubmit={onSubmit}>
 
-                    <input ref={artistAddress}  type="text" name="artistAddress" hidden readOnly value={account.toLowerCase()} />
-                    <label className="block font-semibold text-sm text-gray-900">
-                        Artist Name
-                        <input ref={artistName} required type="text" name="artistName" placeholder="ex. Buddy Holly" className="w-96 mt-2 block rounded border-solid border-2 border-gray-900 p-4 focus:outline-none" />
-                    </label>
+                  <input ref={artistAddress}  type="text" name="artistAddress" hidden readOnly value={account.toLowerCase()} />
+                  <label className="block font-semibold text-sm text-gray-900">
+                      Artist Name
+                      <input ref={artistName} required type="text" name="artistName" placeholder="ex. Buddy Holly" className="w-96 mt-2 block rounded border-solid border-2 border-gray-900 p-4 focus:outline-none" />
+                  </label>
 
-                        <label className="block font-semibold text-sm text-gray-900 mt-6">
-                            Song Title
-                            <input ref={name} required type="text" name="name" placeholder="ex. That'll Be the Day" className="w-96 mt-2 block rounded border-solid border-2 border-gray-900 p-4 focus:outline-none" />
-                        </label>
-                        <label className="block font-semibold text-sm text-gray-900 mt-6">
-                            Song Description
-                            <textarea ref={description} required maxLength="200" rows="3" type="text" name="description" placeholder="ex. Recorded in Clovis, New Mexico, in February 1957..." className="w-96 mt-2 block rounded border-solid border-2 border-gray-900 p-4 focus:outline-none" />
-                        </label>
-                        <label className="block font-semibold text-sm text-gray-900 mt-6">
-                            Cover Art (png, jpg)
-                            <input ref={image} required type="file" name="image" accept="image/png, image/jpeg" className="cursor-pointer w-96 mt-2 block rounded border-solid border-2 border-gray-900 p-4 focus:outline-none" />
-                        </label>
-                        <label className="block font-semibold text-sm text-gray-900 mt-6">
-                            File (mp3)
-                            <input ref={animation} required type="file" name="animation" className="cursor-pointer w-96 mt-2 block rounded border-solid border-2 border-gray-900 p-4 focus:outline-none" />
-                        </label>
-                        <label className="block font-semibold text-sm text-gray-900 mt-6">
-                            Supply
-                            <input ref={supply} required type="number" max="100000" name="supply" placeholder="ex. 10" className="w-96 mt-2 block rounded border-solid border-2 border-gray-900 p-4 focus:outline-none" />
-                        </label>
-                        <label className="block font-semibold text-sm text-gray-900 mt-6">
-                            Price (Gwei)
-                            <input ref={price} required type="number" min="10000000" name="price" placeholder="ex. 10000000" className="w-96 mt-2 block rounded border-solid border-2 border-gray-900 p-4 focus:outline-none" />
-                        </label>
+                      <label className="block font-semibold text-sm text-gray-900 mt-6">
+                          Song Title
+                          <input ref={name} required type="text" name="name" placeholder="ex. That'll Be the Day" className="w-96 mt-2 block rounded border-solid border-2 border-gray-900 p-4 focus:outline-none" />
+                      </label>
+                      <label className="block font-semibold text-sm text-gray-900 mt-6">
+                          Song Description
+                          <textarea ref={description} required maxLength="200" rows="3" type="text" name="description" placeholder="ex. Recorded in Clovis, New Mexico, in February 1957..." className="w-96 mt-2 block rounded border-solid border-2 border-gray-900 p-4 focus:outline-none" />
+                      </label>
+                      <label className="block font-semibold text-sm text-gray-900 mt-6">
+                          Cover Art (png, jpg)
+                          <input ref={image} required type="file" name="image" accept="image/png, image/jpeg" className="cursor-pointer w-96 mt-2 block rounded border-solid border-2 border-gray-900 p-4 focus:outline-none" />
+                      </label>
+                      <label className="block font-semibold text-sm text-gray-900 mt-6">
+                          File (mp3)
+                          <input ref={animation} required type="file" name="animation" className="cursor-pointer w-96 mt-2 block rounded border-solid border-2 border-gray-900 p-4 focus:outline-none" />
+                      </label>
+                      <label className="block font-semibold text-sm text-gray-900 mt-6">
+                          Supply
+                          <input ref={supply} required type="number" max="100000" name="supply" placeholder="ex. 10" className="w-96 mt-2 block rounded border-solid border-2 border-gray-900 p-4 focus:outline-none" />
+                      </label>
+                      <label className="block font-semibold text-sm text-gray-900 mt-6">
+                          Price (Gwei)
+                          <input ref={price} required type="number" min="10000000" name="price" placeholder="ex. 10000000" className="w-96 mt-2 block rounded border-solid border-2 border-gray-900 p-4 focus:outline-none" />
+                      </label>
 
 
 
-                    <input type="submit" value="Create NFT" className="mt-8 mb-8 w-96 cursor-pointer mt-2 block text-white rounded border-solid border-2 bg-gray-900 border-gray-900 p-4 focus:outline-none" />
-                </form>
+                  <input type="submit" value="Create NFT" className="mt-8 mb-8 w-96 cursor-pointer mt-2 block text-white rounded border-solid border-2 bg-gray-900 border-gray-900 p-4 focus:outline-none" />
+              </form>
 
-                <div>
-                    <span className="block font-semibold text-sm text-gray-900">Preview</span>
-                    <div className="border-2 mt-2 border-gray-900 rounded">
-                      <div className="w-96 h-72 bg-gray-100 bg-contain" ref={imagePrev}></div>
-                      <div className="border-t-2 border-gray-900 p-4">
-                          <div ref={titlePrev}>{`<title>`}</div>
-                          <div ref={filePrev}>{`<filename>`}</div>
-                      </div>
+              <div>
+                  <span className="block font-semibold text-sm text-gray-900">Preview</span>
+                  <div className="border-2 mt-2 border-gray-900 rounded">
+                    <div className="w-96 h-72 bg-gray-100 bg-contain" ref={imagePrev}></div>
+                    <div className="border-t-2 border-gray-900 p-4">
+                        <div ref={titlePrev}>{`<title>`}</div>
+                        <div ref={filePrev}>{`<filename>`}</div>
                     </div>
-                    {isSubmitting && <div className="bg-gray-100 text-gray-400 border-dashed border-gray-300 border-4 my-8 text-center font-bold py-8 p-4">Creating...</div>}
-                    {cidCreationSuccess && <div className="bg-emerald-100 text-emerald-400 border-dashed border-emerald-300 border-4 my-8 text-center font-bold py-8 p-4">NFT Created</div>}
-                    {cidCreationSuccess !== null && !cidCreationSuccess && <div className="max-w-sm bg-red-100 text-red-400 border-dashed border-red-300 border-4 my-8 text-center font-bold py-8 p-4">Error</div>}
-                </div>
-                </div>  
-        
-                </div>
-    );
-}}
+                  </div>
+                  {isSubmitting && <div className="bg-gray-100 text-gray-400 border-dashed border-gray-300 border-4 my-8 text-center font-bold py-8 p-4">Creating...</div>}
+                  {cidCreationSuccess && <div className="bg-emerald-100 text-emerald-400 border-dashed border-emerald-300 border-4 my-8 text-center font-bold py-8 p-4">NFT Created</div>}
+                  {cidCreationSuccess !== null && !cidCreationSuccess && <div className="max-w-sm bg-red-100 text-red-400 border-dashed border-red-300 border-4 my-8 text-center font-bold py-8 p-4">Error</div>}
+              </div>
+              </div>  
+      
+      </div>
+  );
+}
 
 Create.getLayout = function getLayout(page) {
   return (

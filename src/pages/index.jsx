@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
 import Head from "next/head";
-import { ethers } from "ethers";
-import NFT from "components/NFT";
 import Layout from "components/Layout";
 import Spinner from "components/Spinner";
 import * as ipfs from 'utils/ipfs';
 import { toastSuccessMessage, toastErrorMessage } from "utils/toast";
 import { useAccount, useContracts, useIpfs } from "contexts";
 
-const zeroAddress = "0x0000000000000000000000000000000000000000";
-const fallbackImage = "http:///i.imgur.com/hfM1J8s.png";
+/* 
+
+  I apologize for the poor code quality. This is an MVP =).
+
+*/
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
@@ -17,51 +18,6 @@ export default function Home() {
   const { ipfsClient } = useIpfs();
   const { radioStarContract } = useContracts();
   const account = useAccount();
-
-  const fetchNftDetails = async (nftURL) => {
-    try {
-      const response = await (await fetch(nftURL)).json();
-      const { image } = response;
-      return { image };
-    } catch (e) {
-      return { image: fallbackImage };
-    }
-  };
-
-  // const loadNfts = async () => {
-  //   setIsLoading(true);
-  //   const baseUri = await dcWarriorsContract.baseURI();
-
-  //   let nfts = [];
-  //   for (let i = 0; i < 1000; i++) {
-  //     try {
-  //       const tokenId = i;
-  //       const owner = await dcWarriorsContract.ownerOf(tokenId);
-  //       const staked = await stakingContract.staked(tokenId);
-  //       const isStaked = staked.owner !== zeroAddress;
-
-  //       const nftURL = `${baseUri}/${tokenId}.json`;
-  //       const { image } = await fetchNftDetails(nftURL);
-
-  //       const nft = {
-  //         imageUrl: image,
-  //         tokenId,
-  //         owner: isStaked ? staked.owner : owner,
-  //         isStaked,
-  //       };
-  //       nfts.push(nft);
-  //     } catch (e) {
-  //       break;
-  //     }
-  //   }
-
-  //   setNfts(nfts);
-  //   setIsLoading(false);
-  // };
-
-  useEffect(() => {
-    // loadNfts();
-  }, [account]);
 
   useEffect(() => {
     const getNfts = (async () => {
@@ -93,8 +49,6 @@ export default function Home() {
             cids.push(cid);
           }
 
-          console.log('cids', cids);
-
           const songMetadatas = await ipfs.get(ipfsClient, cids);
           let pSongMetadatas = [];
           try {
@@ -103,8 +57,6 @@ export default function Home() {
             console.error(e);
             pSongMetadatas = [];
           }
-
-          console.log('songMetadatas', pSongMetadatas);
 
           const withTokenIds = pSongMetadatas.map((m, i) => {
             m.tokenId = tokenIds[i];
@@ -116,7 +68,7 @@ export default function Home() {
 
        
       } catch(e) {
-        console.log(e);
+        console.error(e);
       }
       setIsLoading(false);
     })();
