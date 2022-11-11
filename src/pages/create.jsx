@@ -95,7 +95,7 @@ export default function Create({ }) {
         // function uri(uint256 tokenId) public view virtual override returns (string memory) { ...
         // 
 
-        toastSuccessMessage(`🦄 NFT was successfully minted!`);
+        toastSuccessMessage(`${name.current.value} NFT successfully created!`);
       } catch (e) {
         toastErrorMessage(
           `Couldn't mint nft. Please check the address or try again later.`

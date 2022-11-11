@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Head from "next/head";
-
+import { ethers } from "ethers";
 import NFT from "components/NFT";
 import Layout from "components/Layout";
 import Spinner from "components/Spinner";
@@ -138,7 +138,10 @@ export default function Home() {
                     <div>
                       <button onClick={async () => {
                         try {
-                          const result = await radioStarContract.buySong(nft.tokenId);
+                          const price = await radioStarContract.tokensToPrice(nft.tokenId);
+                          const txn = await radioStarContract.buySong(nft.tokenId, { value: price.toNumber() });
+                          txn.wait();
+
                           toastSuccessMessage('Purchased ' + nft.name + '!');
                         } catch(e) {
                           toastErrorMessage('Error in purchasing ' + nft.name + '!');

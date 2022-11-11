@@ -20,6 +20,7 @@ export default function Profile({ }) {
 
     const [tabIndex, setTabIndex] = useState(0);
     const [created, setCreated] = useState([]);
+    const [purchased, setPurchased] = useState([]);
 
     useEffect(() => {
         if ("collected" in router.query) {
@@ -35,10 +36,6 @@ export default function Profile({ }) {
         try {
           // Created
           if (tabIndex === 0) {
-            // Call contract, get all token metadata CIDs associated with address.
-            console.log('ipfs.get()...', ipfsClient);
-            console.log('radioStarContract', radioStarContract);
-
             // Looks like you cannot get the entire mapping without creating a getter...
             // https://ethereum.stackexchange.com/questions/121069/how-to-properly-call-solidity-mapping-in-ethers-js
             
@@ -83,8 +80,29 @@ export default function Profile({ }) {
             setCreated(pSongMetadatas);
 
           } else {
-            // Collected
+            // Purchased
+            const purchasedSongs = await radioStarContract.getPurchasedSongs(account);
+            const songIds = purchasedSongs.map((s) => s?.toNumber());
+            const songIdsSet = new Set(songIds);
+            const songIds_ = Array.from(songIdsSet);
+    
+            const cids = [];
+            for (let i = 0, ii = songIds_.length; i < ii; i ++) {
+              const cid = await radioStarContract.uri(songIds_[i]);
 
+              cids.push(cid);
+            }
+
+            const songMetadatas = await ipfs.get(ipfsClient, cids);
+            let pSongMetadatas = [];
+            try {
+              pSongMetadatas = songMetadatas.map((m) => JSON.parse(m));
+            } catch(e) {
+              console.error(e);
+              pSongMetadatas = [];
+            }
+
+            setPurchased(pSongMetadatas);
           }
         } catch(e) {
           console.log(e);
@@ -93,7 +111,6 @@ export default function Profile({ }) {
       })();
     }, [tabIndex, account]);
 
-    console.log('created', created);
     return (
         <div className="container mx-auto p-5">
           <h1 className="text-center text-lg font-bold">Profile</h1>
@@ -124,9 +141,18 @@ export default function Profile({ }) {
                 </div>
                 </TabPanel>
                 <TabPanel>
-                <div className="py-6">
-                <h2>Collected NFTs content</h2>
-                </div>
+                  <div className="py-6 flex flex-wrap gap-4">
+                    {isLoading && <div className="m-auto p-20"><Spinner /></div> }
+                  {!isLoading && purchased.map((purchased, i) => <div className="inline-block">
+                      <div className="border-2 mt-2 border-gray-900 rounded" key={i}>
+                        <div className="w-48 h-36 bg-gray-100 bg-contain" style={{ backgroundImage: `url(${purchased.image})` }}></div>
+                        <div className="border-t-2 border-gray-900 p-2">
+                            <div>{purchased.name}</div>
+                            <div>{purchased.attributes[0]?.trait_type}</div>
+                        </div>
+                      </div>
+                  </div>)}
+                  </div>
                 </TabPanel>
             </Tabs>
         </div>
