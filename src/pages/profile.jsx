@@ -9,7 +9,12 @@ import Layout from "components/Layout";
 import Spinner from "components/Spinner";
 
 import { useContracts, useIpfs, useAccount } from "contexts";
-import { toastSuccessMessage, toastErrorMessage } from "utils/toast";
+
+/* 
+
+  I apologize for the poor code quality. This is an MVP =).
+
+*/
 
 export default function Profile({ }) {
     const router = useRouter();
@@ -56,16 +61,12 @@ export default function Profile({ }) {
               hasReachedZeroAddress = pArtist === 0;
             }
 
-            console.log('token ids', tokenIds);
-
             const cids = [];
             for (let i = 0, ii = tokenIds.length; i < ii; i ++) {
               const cid = await radioStarContract.uri(tokenIds[i]);
 
               cids.push(cid);
             }
-
-            console.log('cids', cids);
 
             const songMetadatas = await ipfs.get(ipfsClient, cids);
             let pSongMetadatas = [];
@@ -76,7 +77,6 @@ export default function Profile({ }) {
               pSongMetadatas = [];
             }
 
-            console.log('songMetadatas', pSongMetadatas);
             setCreated(pSongMetadatas);
 
           } else {
@@ -105,7 +105,7 @@ export default function Profile({ }) {
             setPurchased(pSongMetadatas);
           }
         } catch(e) {
-          console.log(e);
+          console.error(e);
         }
         setIsLoading(false);
       })();
@@ -157,24 +157,6 @@ export default function Profile({ }) {
             </Tabs>
         </div>
     );
-
-//   const { dcWarriorsContract } = useContracts();
-//   const [mintAddress, setMintAddress] = React.useState("");
-//   const [isMinting, setIsMinting] = useState(false);
-
-//   const mintNft = async (address) => {
-//     setIsMinting(true);
-//     try {
-//       const txn = await dcWarriorsContract.mint(address);
-//       await txn.wait();
-//       toastSuccessMessage(`🦄 NFT was successfully minted!`);
-//     } catch (e) {
-//       toastErrorMessage(
-//         `Couldn't mint nft. Please check the address or try again later.`
-//       );
-//     }
-//     setIsMinting(false);
-//   };
 }
 
 Profile.getLayout = function getLayout(page) {
