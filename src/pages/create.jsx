@@ -94,7 +94,7 @@ export default function Create({ }) {
         toastErrorMessage(
           `Could not create NFT. Please check the address or try again later.`
         );
-      }
+      
     }
 
     // capture contract event to determine success
@@ -162,7 +162,7 @@ export default function Create({ }) {
         
                 </div>
     );
-}
+}}
 
 Create.getLayout = function getLayout(page) {
   return (
