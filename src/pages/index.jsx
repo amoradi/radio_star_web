@@ -5,7 +5,7 @@ import NFT from "components/NFT";
 import Layout from "components/Layout";
 import Spinner from "components/Spinner";
 import * as ipfs from 'utils/ipfs';
-
+import { toastSuccessMessage, toastErrorMessage } from "utils/toast";
 import { useAccount, useContracts, useIpfs } from "contexts";
 
 const zeroAddress = "0x0000000000000000000000000000000000000000";
@@ -16,9 +16,7 @@ export default function Home() {
   const [nfts, setNfts] = useState([]);
   const { ipfsClient } = useIpfs();
   const { radioStarContract } = useContracts();
-
   const account = useAccount();
-  const { dcWarriorsContract, stakingContract } = useContracts();
 
   const fetchNftDetails = async (nftURL) => {
     try {
@@ -107,7 +105,14 @@ export default function Home() {
           }
 
           console.log('songMetadatas', pSongMetadatas);
-          setNfts(pSongMetadatas);
+
+          const withTokenIds = pSongMetadatas.map((m, i) => {
+            m.tokenId = tokenIds[i];
+
+            return m
+          });
+
+          setNfts(withTokenIds);
 
        
       } catch(e) {
@@ -122,12 +127,25 @@ export default function Home() {
       <section className="body-font text-gray-600">
         <div className="container mx-auto px-5 pt-12 pb-24">
            <div className="py-6 flex flex-wrap gap-4">
-            {!isLoading && nfts.map((nft, i) => <div className="inline-block" key={i}>
+            {!isLoading && nfts.map((nft, i) => <div className="inline-block" key={i} data-token={nft.tokenId}>
                 <div className="border-2 mt-2 border-gray-900 rounded" key={i}>
                   <div className="w-48 h-36 bg-gray-100 bg-contain" style={{ backgroundImage: `url(${nft.image})` }}></div>
-                  <div className="border-t-2 border-gray-900 p-2">
-                      <div>{nft.name}</div>
-                      <div>{nft.attributes[0]?.trait_type}</div>
+                  <div className="border-t-2 border-gray-900 p-2 px-3 flex items-center justify-between">
+                    <div>
+                      <div className="whitespace-nowrap w-16 text-ellipsis overflow-hidden">{nft.name}</div>
+                      <div className="whitespace-nowrap w-16 text-ellipsis overflow-hidden">{nft.attributes[0]?.trait_type}</div>
+                    </div>
+                    <div>
+                      <button onClick={() => {
+                        try {
+                          radioStarContract.buyRadioStar(nft.tokenId);
+                          toastSuccessMessage('Purchased ' + nft.name + '!');
+                        } catch(e) {
+                          toastErrorMessage('Error in purchasing ' + nft.name + '!');
+                          console.error(e);
+                        }
+                      }} className="rounded font-600 font-semibold text-sm bg-teal-200 p-1 px-3">Buy</button>
+                    </div>
                   </div>
                 </div>
                 </div>
