@@ -21,8 +21,6 @@ This is the the frontend for our Dapp. It is built with Next.js and ethers.js.
 - **src/contexts.js** - React contexts to make state available to nested components
 - **next.config.js, postcss.config.js, pretter.config.js, tailwind.config.js, tsconfig.json** - Configuration files for Next.js and Tailwind
 
-**Note:** For generating the NFT images and their metadatas you can use our [warriors-generator](https://github.com/DappCamp-Cohort-2/dappcamp-warriors/tree/main/warriors-generator).
-
 ---
 
 ## Note
