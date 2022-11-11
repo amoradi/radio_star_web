@@ -130,7 +130,7 @@ export default function Profile({ }) {
                   {isLoading && <div className="m-auto p-20"><Spinner /></div> }
                 {!isLoading && created.map((created, i) => <div className="inline-block">
                     <div className="border-2 mt-2 border-gray-900 rounded" key={i}>
-                      <div className="w-48 h-36 bg-gray-100 bg-contain" style={{ backgroundImage: `url(${created.image})` }}></div>
+                      <div className="w-48 h-36 bg-gray-100 bg-contain bg-center" style={{ backgroundImage: `url(${created.image})` }}></div>
                       <div className="border-t-2 border-gray-900 p-2">
                           <div>{created.name}</div>
                           <div>{created.attributes[0]?.trait_type}</div>
@@ -145,7 +145,7 @@ export default function Profile({ }) {
                     {isLoading && <div className="m-auto p-20"><Spinner /></div> }
                   {!isLoading && purchased.map((purchased, i) => <div className="inline-block">
                       <div className="border-2 mt-2 border-gray-900 rounded" key={i}>
-                        <div className="w-48 h-36 bg-gray-100 bg-contain" style={{ backgroundImage: `url(${purchased.image})` }}></div>
+                        <div className="w-48 h-36 bg-gray-100 bg-contain bg-center" style={{ backgroundImage: `url(${purchased.image})` }}></div>
                         <div className="border-t-2 border-gray-900 p-2">
                             <div>{purchased.name}</div>
                             <div>{purchased.attributes[0]?.trait_type}</div>

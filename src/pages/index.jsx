@@ -81,7 +81,7 @@ export default function Home() {
            <div className="py-6 flex flex-wrap gap-4">
             {!isLoading && nfts.map((nft, i) => <div className="inline-block" key={i} data-token={nft.tokenId}>
                 <div className="border-2 mt-2 border-gray-900 rounded" key={i}>
-                  <div className="w-48 h-36 bg-gray-100 bg-contain" style={{ backgroundImage: `url(${nft.image})` }}></div>
+                  <div className="w-48 h-36 bg-gray-100 bg-contain bg-center" style={{ backgroundImage: `url(${nft.image})` }}></div>
                   <div className="border-t-2 border-gray-900 p-2 px-3 flex items-center justify-between">
                     <div>
                       <div className="whitespace-nowrap w-16 text-ellipsis overflow-hidden">{nft.name}</div>

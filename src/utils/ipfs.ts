@@ -19,7 +19,6 @@ export async function add(node, body) {
         const results = await node.add(data);
         const cid = results?.path || null;
         
-        console.log(results);
         // "results" example type:
         //
         // path: 'QmagygrSKgPt6iFbhc8u9s2JmDqLH3iHDNBLVtKtu9Ky7r',
@@ -40,13 +39,7 @@ export async function get(node, metadataCids = []) {
         // Just get 1st one for now. TODO: Fix this.
         for (let i = 0, ii = metadataCids.length; i < ii; i++) {
             const cid = metadataCids[i];
-            console.log('GET >>>', cid);
-            console.log('GET >>> 2');
-
-            //((req.query?.cids || '').split(',') || []).forEach(async (cid) => {
-
-            
-            console.log('GET >>> 3', cid);
+           
             if (!cid) {
                 return [];
             }
@@ -55,18 +48,14 @@ export async function get(node, metadataCids = []) {
             const decoder = new TextDecoder();
             let data = ''
 
-            console.log('GET >>> 4', stream);
             for await (const chunk of stream) {
                 // chunks of data are returned as a Uint8Array, convert it back to a string
-                console.log('GET >>> 5');
                 data += decoder.decode(chunk, { stream: true });
             }
 
-            console.log('GET >>> 6');
             songsMetadata.push(data);
         };
         
-        console.log('songsMetadata >>', songsMetadata)
         return songsMetadata;
     } catch(e) {
         return [];

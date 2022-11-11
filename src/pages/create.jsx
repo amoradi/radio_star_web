@@ -91,10 +91,11 @@ export default function Create({ }) {
 
         toastSuccessMessage(`${name.current.value} NFT successfully created!`);
       } catch (e) {
+        console.error(e);
         toastErrorMessage(
           `Could not create NFT. Please check the address or try again later.`
-        ); 
-    }
+        );
+      }
 
       // capture contract event to determine success
       setCidCreationSuccess(!!cid);
@@ -148,7 +149,7 @@ export default function Create({ }) {
               <div>
                   <span className="block font-semibold text-sm text-gray-900">Preview</span>
                   <div className="border-2 mt-2 border-gray-900 rounded">
-                    <div className="w-96 h-72 bg-gray-100 bg-contain" ref={imagePrev}></div>
+                    <div className="w-96 h-72 bg-gray-100 bg-cover" ref={imagePrev}></div>
                     <div className="border-t-2 border-gray-900 p-4">
                         <div ref={titlePrev}>{`<title>`}</div>
                         <div ref={filePrev}>{`<filename>`}</div>
