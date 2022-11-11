@@ -1,16 +1,19 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-
-import { useRouter } from 'next/router'
 import Head from "next/head";
 
 import * as ipfs from 'utils/ipfs';
 import Layout from "components/Layout";
-import Spinner from "components/Spinner";
 
 import { useAccount, useContracts, useIpfs } from "contexts";
-// TODO: Could use these toasts instead of the custom ones.
+// TODO: Perhaps use Spinneer and toasts instead of the homespun statuses.
+// import Spinner from "components/Spinner";
 import { toastSuccessMessage, toastErrorMessage } from "utils/toast";
+
+/* 
+
+  I apologize for the poor code quality. This is an MVP =).
+
+*/
 
 const convertBase64 = (file) => {
     return new Promise((resolve, reject) => {
@@ -78,22 +81,13 @@ export default function Create({ }) {
       price: price.current.value,
       supply: supply.current.value,
     });
-
-    console.log('CID >>', cid);
-    console.log('radioStarContract >>', radioStarContract);
    
     if (cid) {
       try {
         // QUESTION: 
         // Make radioStarContract return a success/token/predicate for "success"?
         // Does not failing mean success? (I've witnessed this throwing and entering the catch block from passing extra args.)
-        console.log('radioStarContract.createSong(', supply.current.value, price.current.value, cid)
         const success = await radioStarContract.createSong(supply.current.value, price.current.value, cid);
-
-        //
-        // In the future, for other viewss, use to get tokenUri (AKA metadata CID)
-        // function uri(uint256 tokenId) public view virtual override returns (string memory) { ...
-        // 
 
         toastSuccessMessage(`${name.current.value} NFT successfully created!`);
       } catch (e) {
@@ -161,7 +155,7 @@ export default function Create({ }) {
                           <div ref={filePrev}>{`<filename>`}</div>
                       </div>
                     </div>
-                    {isSubmitting && <div className="bg-gray-100 text-gray-400 border-dashed border-gray-300 border-4 my-8 text-center font-bold py-8 p-4">...Creating...</div>}
+                    {isSubmitting && <div className="bg-gray-100 text-gray-400 border-dashed border-gray-300 border-4 my-8 text-center font-bold py-8 p-4">Creating...</div>}
                     {cidCreationSuccess && <div className="bg-emerald-100 text-emerald-400 border-dashed border-emerald-300 border-4 my-8 text-center font-bold py-8 p-4">NFT Created</div>}
                     {cidCreationSuccess !== null && !cidCreationSuccess && <div className="max-w-sm bg-red-100 text-red-400 border-dashed border-red-300 border-4 my-8 text-center font-bold py-8 p-4">Error</div>}
                 </div>
@@ -169,61 +163,6 @@ export default function Create({ }) {
         
                 </div>
     );
-
-//   const { dcWarriorsContract } = useContracts();
-//   const [mintAddress, setMintAddress] = React.useState("");
-//   const [isMinting, setIsMinting] = useState(false);
-
-//   const mintNft = async (address) => {
-//     setIsMinting(true);
-//     try {
-//       const txn = await dcWarriorsContract.mint(address);
-//       await txn.wait();
-//       toastSuccessMessage(`🦄 NFT was successfully minted!`);
-//     } catch (e) {
-//       toastErrorMessage(
-//         `Couldn't mint nft. Please check the address or try again later.`
-//       );
-//     }
-//     setIsMinting(false);
-//   };
-
-  return (
-    <div className="mx-auto mt-8 max-w-7xl p-4">
-      <section className="body-font text-gray-600">
-        <div className="border-1 m-auto flex flex-col rounded-lg border-gray-100 p-8 md:w-1/2 lg:w-2/6">
-          <h2 className="title-font mb-5 text-lg font-medium ">
-            Immortalize your creation
-          </h2>
-          <div className="relative mb-4">
-            <label className="text-sm leading-7">
-              Mint new NFT to this address
-            </label>
-            <input
-              type="text"
-              className="w-full rounded border border-gray-300 bg-white py-1 px-3 text-base leading-8 outline-none transition-colors duration-200 ease-in-out focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
-              value={mintAddress}
-              placeholder="0x14dc79964da2c08b23698b3d3cc7ca32193d9955"
-              onChange={(e) => setMintAddress(e.target.value)}
-            />
-          </div>
-          {!isMinting && (
-            <button
-              className="rounded border-0 bg-indigo-500 py-2 px-8 text-lg text-white hover:bg-indigo-600 focus:outline-none"
-              onClick={() => mintNft(mintAddress)}
-            >
-              Mint item
-            </button>
-          )}
-          {isMinting && (
-            <div className="mt-1">
-              <Spinner />
-            </div>
-          )}
-        </div>
-      </section>
-    </div>
-  );
 }
 
 Create.getLayout = function getLayout(page) {
