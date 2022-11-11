@@ -138,7 +138,7 @@ export default function Home() {
                     <div>
                       <button onClick={() => {
                         try {
-                          radioStarContract.buyRadioStar(nft.tokenId);
+                          const result = await radioStarContract.buySong(nft.tokenId);
                           toastSuccessMessage('Purchased ' + nft.name + '!');
                         } catch(e) {
                           toastErrorMessage('Error in purchasing ' + nft.name + '!');

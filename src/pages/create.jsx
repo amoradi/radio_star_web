@@ -87,8 +87,8 @@ export default function Create({ }) {
         // QUESTION: 
         // Make radioStarContract return a success/token/predicate for "success"?
         // Does not failing mean success? (I've witnessed this throwing and entering the catch block from passing extra args.)
-        console.log('radioStarContract.createRadioStar(', supply.current.value, price.current.value, cid)
-        const success = await radioStarContract.createRadioStar(supply.current.value, price.current.value, cid);
+        console.log('radioStarContract.createSong(', supply.current.value, price.current.value, cid)
+        const success = await radioStarContract.createSong(supply.current.value, price.current.value, cid);
 
         //
         // In the future, for other viewss, use to get tokenUri (AKA metadata CID)
