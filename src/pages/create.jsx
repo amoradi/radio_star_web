@@ -92,7 +92,7 @@ export default function Create({ }) {
         toastSuccessMessage(`${name.current.value} NFT successfully created!`);
       } catch (e) {
         toastErrorMessage(
-          `Couldn't mint nft. Please check the address or try again later.`
+          `Could not create NFT. Please check the address or try again later.`
         );
       }
     }
@@ -108,7 +108,6 @@ export default function Create({ }) {
 
             <div className="py-12 flex justify-evenly items-start flex-wrap">
                 <form onSubmit={onSubmit}>
-                  {/* TODO addd supply andd price fields */}
 
                     <input ref={artistAddress}  type="text" name="artistAddress" hidden readOnly value={account.toLowerCase()} />
                     <label className="block font-semibold text-sm text-gray-900">
