@@ -136,7 +136,7 @@ export default function Home() {
                       <div className="whitespace-nowrap w-16 text-ellipsis overflow-hidden">{nft.attributes[0]?.trait_type}</div>
                     </div>
                     <div>
-                      <button onClick={() => {
+                      <button onClick={async () => {
                         try {
                           const result = await radioStarContract.buySong(nft.tokenId);
                           toastSuccessMessage('Purchased ' + nft.name + '!');
