@@ -11,22 +11,27 @@ import { useAccount, useContracts } from "contexts";
 
 export default function Header() {
   const account = useAccount();
-  const isMetamaskConnected = !!account;
-
-  const { dcWarriorsContract } = useContracts();
-
-  const [canShowMintPage, setCanShowMintPage] = useState(false);
-
-  const checkMintPermission = async (account) => {
-    const currAddress = account.toLowerCase();
-    const nftContractOwner = (await dcWarriorsContract.owner()).toLowerCase();
-    setCanShowMintPage(currAddress == nftContractOwner);
-  };
+  //const isMetamaskConnected = !!account;
+  const [isMetamaskConnected, setIsMetamaskConnected] = useState(!!account);
 
   useEffect(() => {
-    if (!isMetamaskConnected || !dcWarriorsContract) return;
-    checkMintPermission(account);
-  }, [account, isMetamaskConnected, dcWarriorsContract]);
+    setIsMetamaskConnected(!!account);
+  },[account]);
+
+  // const { dcWarriorsContract } = useContracts();
+
+  // const [canShowMintPage, setCanShowMintPage] = useState(false);
+
+  // const checkMintPermission = async (account) => {
+  //   const currAddress = account.toLowerCase();
+  //   const nftContractOwner = (await dcWarriorsContract.owner()).toLowerCase();
+  //   setCanShowMintPage(currAddress == nftContractOwner);
+  // };
+
+  // useEffect(() => {
+  //   if (!isMetamaskConnected || !dcWarriorsContract) return;
+  //   checkMintPermission(account);
+  // }, [account, isMetamaskConnected, dcWarriorsContract]);
 
   return (
     <header className="body-font mx-auto max-w-7xl p-4 text-gray-600">
