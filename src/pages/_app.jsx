@@ -17,6 +17,12 @@ import radioStarContractMetadata from "data/abis/RadioStar.metadata.json";
 
 import "../styles/globals.css";
 
+/* 
+
+  I apologize for the poor code quality. This is an MVP =).
+
+*/
+
 const radioStarAddress = process.env.NEXT_PUBLIC_RADIO_STAR_ADDRESS;
 
 function MyApp({ Component, pageProps }) {
@@ -67,23 +73,6 @@ function MyApp({ Component, pageProps }) {
       // timeout: 10000
 
       setIpfsClient(client);
-
-      // console.log(node)
-      // const c = await node.add('Hello world!')
-      // console.log(c);
-      // // const r = await node.get(c.path);
-      // // console.log(r);
-
-      // const stream = node.cat(c.path);
-      // const decoder = new TextDecoder();
-      // let data = ''
-
-      // console.log('GET >>> 4', stream);
-      // for await (const chunk of stream) {
-      //     // chunks of data are returned as a Uint8Array, convert it back to a string
-      //     console.log('GET >>> 5');
-      //     data += decoder.decode(chunk, { stream: true });
-      // }
     }
 
     initIpfsClient()
