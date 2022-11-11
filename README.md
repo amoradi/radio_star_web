@@ -36,15 +36,16 @@ Be sure to update the [abi folder](frontend/src/data/abis) for smart contract ch
    1. Specify the organisation and the name of the repo to clone it
 1. Complete the **Configure Project** step in the Vercel Wizard. In this step, You have to configure the following environment variables:
    1. **NEXT_PUBLIC_NETWORK_ID:** The id of the network on which your contracts are deployed. For example, the value will be **5** if your contracts are on the **Goerli** Testnet.
-   1. **NEXT_PUBLIC_CAMP_ADDRESS:** Address of the deployed Camp contract
-   1. **NEXT_PUBLIC_WARRIORS_ADDRESS:** Address of the deployed DappCampWarriors contract
-   1. **NEXT_PUBLIC_STAKING_ADDRESS:** Address of the deployed Staking contract
+   1. **NEXT_PUBLIC_RADIO_STAR_ADDRESS:** 
+   1. **NEXT_PUBLIC_INFURA_PROJECT_ID:** 
+   1. **NEXT_PUBLIC_INFURA_SECRET:**
+   1. **NEXT_PUBLIC_INFURA_API_ENDPOINT**
    1. The [abis](src/data/abis) are already included in this repo. So, you don't need to update the abis if you don't make any changes to the smart contracts.
 1. Click on the deploy button
 1. Wait for a few minutes for the deploy to finish.
 1. You will be able to visit your new webapp on the generated url.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FDappCamp-Cohort-4%2Fdappcamp-warriors-frontend&env=NEXT_PUBLIC_NETWORK_ID,NEXT_PUBLIC_CAMP_ADDRESS,NEXT_PUBLIC_WARRIORS_ADDRESS,NEXT_PUBLIC_STAKING_ADDRESS)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Famoradi%2Fradio_star_web&env=NEXT_PUBLIC_NETWORK_ID,NEXT_PUBLIC_RADIO_STAR_ADDRESS,NEXT_PUBLIC_INFURA_PROJECT_ID,NEXT_PUBLIC_INFURA_SECRET,NEXT_PUBLIC_INFURA_API_ENDPOINT)
 
 ---
 
