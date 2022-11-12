@@ -55,7 +55,7 @@ function MyApp({ Component, pageProps }) {
 
   useEffect(() => {
     load();
-  }, []);
+  }, [account]);
 
   useEffect(() => {
     const initIpfsClient = async () => {

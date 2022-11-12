@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from 'next/image'
 import classNames from 'classnames';
+import { toastSuccessMessage, toastErrorMessage } from "utils/toast";
 
 import Address from "components/Address";
 import Balance from "components/Balance";
@@ -13,25 +14,40 @@ export default function Header() {
   const account = useAccount();
   //const isMetamaskConnected = !!account;
   const [isMetamaskConnected, setIsMetamaskConnected] = useState(!!account);
+  const { radioStarContract } = useContracts();
+  const [isWithdrawalable, setIsWithdrawalable] = useState(false);
 
   useEffect(() => {
     setIsMetamaskConnected(!!account);
   },[account]);
 
-  // const { dcWarriorsContract } = useContracts();
+  useEffect(() => {
+    if (radioStarContract) {
+      (async () => {
+        let isWithdrawal = false;
+        const isContractOwner = account == 0x63A62b6D6f88C8f7fF559Be451A9eE3Cef51125C;
+        const tokenIds = [];
+        let increment = 1;
+        let hasReachedZeroAddress = false; // Stinks assumes increment/know about implementation details.
 
-  // const [canShowMintPage, setCanShowMintPage] = useState(false);
+        const pAccount = parseInt(account, 16);
+        while(!hasReachedZeroAddress) {
+          const artist = await radioStarContract.tokensToArtist(increment);
+          const pArtist = parseInt(artist, 16);
 
-  // const checkMintPermission = async (account) => {
-  //   const currAddress = account.toLowerCase();
-  //   const nftContractOwner = (await dcWarriorsContract.owner()).toLowerCase();
-  //   setCanShowMintPage(currAddress == nftContractOwner);
-  // };
+          if (pAccount === pArtist) {
+            tokenIds.push(increment);
+          }
+          
+          increment++;
+          hasReachedZeroAddress = pArtist === 0;
+        }
+        const hasCreatedANft = tokenIds.length > 0;
 
-  // useEffect(() => {
-  //   if (!isMetamaskConnected || !dcWarriorsContract) return;
-  //   checkMintPermission(account);
-  // }, [account, isMetamaskConnected, dcWarriorsContract]);
+        setIsWithdrawalable(isContractOwner || hasCreatedANft)
+      })();
+    }
+  }, [account, radioStarContract]);
 
   return (
     <header className="body-font mx-auto max-w-7xl p-4 text-gray-600">
@@ -41,17 +57,25 @@ export default function Header() {
           <strong className="pl-0 p-2">RADIO STAR</strong>
 
         </a>
-        </Link>
-        {/* <nav className="flex flex-wrap items-center justify-center text-base md:mr-auto	md:ml-4 md:border-l md:border-gray-400 md:py-1 md:pl-4">
-          {canShowMintPage && (
-            <Link href="/mint">
-              <a className="mr-5 hover:text-gray-900">Mint</a>
-            </Link>
-          )}
-        </nav> */}
-       
-        
+        </Link>  
           <div className="flex gap-6 items-baseline">
+            {isWithdrawalable && 
+              <Link
+                  href={""}
+                >
+                  <a onClick={async (e) => {
+                    e.preventDefault();
+                    try {
+                      const t = await radioStarContract?.withdraw();
+                      toastSuccessMessage('Withdraw success');
+                    } catch(e) {
+                      console.error(e);
+                      toastErrorMessage('Withdraw error');
+                    }
+                  }} 
+                  className={classNames("font-semibold text-sm mt-4 inline-flex items-center rounded text-gray-900 border-2 border-gray-900 py-1 px-6 focus:outline-none md:mt-0",{ "opacity-25 cursor-not-allowed": !isMetamaskConnected, "hover:bg-gray-200": isMetamaskConnected} )}>Withdraw</a>
+                </Link>
+            }
             <Link
               href={isMetamaskConnected ? "/create" : ""}
             >

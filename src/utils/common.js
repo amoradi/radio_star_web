@@ -17,7 +17,9 @@ const networkName = networks[networkId];
 
 export const getEthereumObject = () => {
   const { ethereum } = window;
-  if (!ethereum) return null;
+  console.log('eth', ethereum);
+  if (!ethereum || ethereum.networkVersion === null) return null;
+  console.log(ethereum.networkVersion, networkId);
 
   if (ethereum.networkVersion != networkId) {
     toastErrorMessage(`Please switch to the ${networkName} network`);
