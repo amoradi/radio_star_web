@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import Head from "next/head";
-
+import { ethers } from "ethers";
 import * as ipfs from 'utils/ipfs';
 import Layout from "components/Layout";
 
@@ -87,7 +87,12 @@ export default function Create({ }) {
         // QUESTION: 
         // Make radioStarContract return a success/token/predicate for "success"?
         // Does not failing mean success? (I've witnessed this throwing and entering the catch block from passing extra args.)
-        const success = await radioStarContract.createSong(supply.current.value, price.current.value, cid);
+        
+        // Convert user's input price, in gwei to wei
+        const inGwei = ethers.BigNumber.from(price.current.value);
+        const p = ethers.BigNumber.from(1000000000);
+        const inWei = inGwei.mul(p);
+        const success = await radioStarContract.createSong(supply.current.value, inWei, cid);
 
         toastSuccessMessage(`${name.current.value} NFT successfully created!`);
       } catch (e) {

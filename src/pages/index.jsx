@@ -91,7 +91,7 @@ export default function Home() {
                       <button onClick={async () => {
                         try {
                           const price = await radioStarContract.tokensToPrice(nft.tokenId);
-                          const txn = await radioStarContract.buySong(nft.tokenId, { value: price.toNumber() });
+                          const txn = await radioStarContract.buySong(nft.tokenId, { value: price });
                           txn.wait();
 
                           toastSuccessMessage('Purchased ' + nft.name + '!');

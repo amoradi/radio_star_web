@@ -24,7 +24,6 @@ export default function Header() {
   useEffect(() => {
     if (radioStarContract) {
       (async () => {
-        let isWithdrawal = false;
         const isContractOwner = account == 0x63A62b6D6f88C8f7fF559Be451A9eE3Cef51125C;
         const tokenIds = [];
         let increment = 1;
